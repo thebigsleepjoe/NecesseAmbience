@@ -1,18 +1,22 @@
 package ambiencemod.ambience.sounds;
 
-import ambiencemod.AmbienceMod;
 import necesse.engine.util.GameRandom;
 
 public class FootstepsAmbientNoise extends PositionalAmbientNoise {
     public FootstepsAmbientNoise() {
         super();
         this.SetChance(SoundChance.ALWAYS);
-        this.SetVolume(0.2f);
+        this.SetVolume(1.0f);
         this.SetPitchRange(0.6f, 0.8f);
         this.SetMinTicksBetweenPlays(0); // This is managed elsewhere.
 
         // Add the sound paths
-        this.addSoundPath("footsteps/DirtFootstep1.ogg");
+        // this.addSoundPath("footsteps/Grass1.ogg");
+        this.addSoundPath("footsteps/Grass2.ogg");
+        this.addSoundPath("footsteps/Grass3.ogg");
+        this.addSoundPath("footsteps/Grass4.ogg");
+        this.addSoundPath("footsteps/Grass5.ogg");
+        this.addSoundPath("footsteps/Grass6.ogg");
     }
 
     public float getChanceFromSpeedPct(float speedPct) {
