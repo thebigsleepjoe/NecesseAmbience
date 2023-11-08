@@ -57,10 +57,12 @@ public abstract class PositionalAmbientNoise {
 
     public void playSound(float x, float y) {
         // Test if we succeed the min ticks between plays
-        if (AmbientManager.getTick() - this.lastPlayTick < this.minTicksBetweenPlays) {
-            return;
-        } else {
-            this.lastPlayTick = AmbientManager.getTick();
+        if (this.minTicksBetweenPlays != 0) {
+            if (AmbientManager.getTick() - this.lastPlayTick < this.minTicksBetweenPlays) {
+                return;
+            } else {
+                this.lastPlayTick = AmbientManager.getTick();
+            }
         }
         // Test if we succeed the chance roll
         if (this.chance != SoundChance.ALWAYS && (GameRandom.globalRandom.getFloatBetween(0.0f, 1.0f) > this.chance.getChance())) {

@@ -9,7 +9,7 @@ public class FootstepsAmbientNoise extends PositionalAmbientNoise {
         this.SetChance(SoundChance.ALWAYS);
         this.SetVolume(0.2f);
         this.SetPitchRange(0.6f, 0.8f);
-        this.SetMinTicksBetweenPlays(1); // This is managed elsewhere.
+        this.SetMinTicksBetweenPlays(0); // This is managed elsewhere.
 
         // Add the sound paths
         this.addSoundPath("footsteps/DirtFootstep1.ogg");

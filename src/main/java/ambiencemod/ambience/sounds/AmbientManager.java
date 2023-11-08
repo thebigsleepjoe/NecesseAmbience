@@ -23,13 +23,14 @@ public final class AmbientManager {
 
     public void manageMobFootstepSounds(Mob mob) {
         // Execute this code once per 0.3 seconds
-        if (AmbientManager.getTick() % AmbientManager.secondsToTicks(0.3f) != 0) {
+        if (AmbientManager.getTick() % AmbientManager.secondsToTicks(0.4f) != 0) {
             return;
         }
         if (mob.isFlying() || mob.inLiquid()) return;
 
         float mobSpeedPct = getMobSpeedPct(mob);
         if (mobSpeedPct > 0.1f) {
+            System.out.println("Playing footstep for " + mob.getDisplayName());
             footstepsAmbientNoise.playSound(mob.x, mob.y, mobSpeedPct);
         }
     }
@@ -52,12 +53,21 @@ public final class AmbientManager {
         return client.getPlayer();
     }
 
+    public static float distance(float x1, float y1, float x2, float y2) {
+        return (float) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+
+
     public void onMobTick(Mob mob) {
         if (!isInGame()) return;
         PlayerMob ply = this.getLocalPlayer();
+        if (ply == mob) { // end early, no need to calculate distance to self
+            this.manageMobFootstepSounds(mob);
+            return;
+        }
         if (ply == null) return;
-        float distTo = GameMath.diamondDistance(mob.x, mob.y, ply.x, ply.y);
-        if (distTo < 1000) { // Prevent overwhelming the sound engine
+        float distTo = distance(mob.x, mob.y, ply.x, ply.y);
+        if (distTo < 800) { // Prevent overwhelming the sound engine
             this.manageMobFootstepSounds(mob);
         }
     }
