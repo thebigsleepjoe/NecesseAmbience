@@ -1,5 +1,6 @@
 package ambiencemod.ambience;
 
+import ambiencemod.AmbienceMod;
 import necesse.engine.modLoader.annotations.ModMethodPatch;
 import necesse.entity.mobs.PlayerMob;
 import net.bytebuddy.asm.Advice;
@@ -42,14 +43,8 @@ public class PlayerTickPatch {
 
     @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
     static boolean onEnter(@Advice.This PlayerMob playerMob) {
-        // Debug message to know it's working
-        System.out.println("Entered exec for PlayerMob.serverTick()");
-        return false;
-    }
-
-    @Advice.OnMethodExit
-    static void onExit(@Advice.This PlayerMob playerMob) {
-        System.out.println("Exited exec for PlayerMob.serverTick()");
+        AmbienceMod.ambientManager.onPlayerTick(playerMob);
+        return false; // return false to not disrupt other code execution
     }
 
 }

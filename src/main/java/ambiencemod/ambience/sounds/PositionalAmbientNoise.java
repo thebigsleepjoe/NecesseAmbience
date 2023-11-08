@@ -6,16 +6,18 @@ import necesse.engine.util.GameRandom;
 import necesse.gfx.gameSound.GameSound;
 import java.util.ArrayList;
 
-public class PositionalAmbientNoise {
+public abstract class PositionalAmbientNoise {
     ArrayList<GameSound> sounds;
     float volume = 1.0f;
     float pitchRangeLow = 1.0f;
     float pitchRangeHigh = 1.1f;
+    SoundChance chance = SoundChance.ALWAYS;
 
-    public PositionalAmbientNoise(float volume, float pitchRangeLow, float pitchRangeHigh) {
+    public PositionalAmbientNoise(SoundChance chance, float volume, float pitchRangeLow, float pitchRangeHigh) {
         this.volume = volume;
         this.pitchRangeLow = pitchRangeLow;
         this.pitchRangeHigh = pitchRangeHigh;
+        this.chance = chance;
     }
 
     public void addSound(GameSound sound) {
@@ -37,6 +39,9 @@ public class PositionalAmbientNoise {
     }
 
     public void playSound(float x, float y) {
+        if (this.chance != SoundChance.ALWAYS && (GameRandom.globalRandom.getFloatBetween(0.0f, 1.0f) > this.chance.getChance())) {
+            return;
+        }
         Screen.playSound(this.getRandomSound(), SoundEffect.effect(x, y)
                 .volume(this.volume)
                 .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)));
