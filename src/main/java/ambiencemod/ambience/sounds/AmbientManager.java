@@ -23,7 +23,7 @@ public final class AmbientManager {
         if (AmbientManager.getTick() % AmbientManager.secondsToTicks(0.3f) != 0) {
             return;
         }
-        if (mob.isFlying()) return;
+        if (mob.isFlying() || mob.inLiquid()) return;
 
         float mobSpeedPct = getMobSpeedPct(mob);
         if (mobSpeedPct > 0.1f) {
