@@ -1,6 +1,8 @@
-package ambiencemod.ambience.sounds;
+package ambiencemod.ambience.sounds.forest;
 
-public class WindAmbient extends GlobalAmbient{
+import ambiencemod.ambience.sounds.GlobalAmbient;
+
+public class WindAmbient extends GlobalAmbient {
 
     public WindAmbient() {
         super();

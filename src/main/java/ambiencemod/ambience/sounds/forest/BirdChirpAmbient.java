@@ -1,4 +1,6 @@
-package ambiencemod.ambience.sounds;
+package ambiencemod.ambience.sounds.forest;
+
+import ambiencemod.ambience.sounds.GlobalAmbient;
 
 public class BirdChirpAmbient extends GlobalAmbient {
 

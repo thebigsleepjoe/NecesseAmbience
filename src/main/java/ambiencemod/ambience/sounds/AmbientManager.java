@@ -1,5 +1,8 @@
 package ambiencemod.ambience.sounds;
 
+import ambiencemod.ambience.sounds.footsteps.FootstepsGrass;
+import ambiencemod.ambience.sounds.forest.BirdChirpAmbient;
+import ambiencemod.ambience.sounds.forest.WindAmbient;
 import necesse.engine.GlobalData;
 import necesse.engine.Screen;
 import necesse.engine.network.client.Client;
@@ -9,19 +12,19 @@ import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
 
 public final class AmbientManager {
-    FootstepsAmbient footstepsAmbient;
+    FootstepsGrass footstepsGrass;
     WindAmbient windAmbient;
     BirdChirpAmbient birdChirpAmbient;
 
     public AmbientManager() {
-        footstepsAmbient = new FootstepsAmbient();
+        footstepsGrass = new FootstepsGrass();
         windAmbient = new WindAmbient();
         birdChirpAmbient = new BirdChirpAmbient();
     }
 
     public float getMobSpeedPct(Mob mob) {
         //return (mob.getCurrentSpeed() / mob.getSpeed());
-        return (mob.getCurrentSpeed() / 35.0f); // 35.0f is baseline human speed, makes footstep speed more consistent. basically 2 step sounds per second
+        return (mob.getCurrentSpeed() / 35.0f); // 35.0f is baseline human speed, makes footstep speed more consistent. basically 2x step sounds per second
     }
 
     private void manageMobFootstepSounds(Mob mob) {
@@ -34,7 +37,7 @@ public final class AmbientManager {
         float mobSpeedPct = getMobSpeedPct(mob);
         if (mobSpeedPct > 0.1f) {
             System.out.println("Playing footstep for " + mob.getDisplayName());
-            footstepsAmbient.playSound(mob.x, mob.y, mobSpeedPct);
+            footstepsGrass.playSound(mob.x, mob.y, mobSpeedPct);
         }
     }
 
