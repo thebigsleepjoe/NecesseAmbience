@@ -11,6 +11,6 @@ public class WindAmbient extends GlobalAmbient{
         this.setFadeInTime(1.0f);
         this.setTimeBetweenRepeats(5.0f);
 
-        this.addSoundPath("wind/Wind1.ogg");
+        this.addSoundPath("global/Wind1.ogg");
     }
 }

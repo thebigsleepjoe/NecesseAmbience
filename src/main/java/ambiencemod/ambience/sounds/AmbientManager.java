@@ -11,10 +11,12 @@ import necesse.entity.mobs.PlayerMob;
 public final class AmbientManager {
     FootstepsAmbient footstepsAmbient;
     WindAmbient windAmbient;
+    BirdChirpAmbient birdChirpAmbient;
 
     public AmbientManager() {
         footstepsAmbient = new FootstepsAmbient();
         windAmbient = new WindAmbient();
+        birdChirpAmbient = new BirdChirpAmbient();
     }
 
     public float getMobSpeedPct(Mob mob) {
@@ -22,7 +24,7 @@ public final class AmbientManager {
         return (mob.getCurrentSpeed() / 35.0f); // 35.0f is baseline human speed, makes footstep speed more consistent. basically 2 step sounds per second
     }
 
-    public void manageMobFootstepSounds(Mob mob) {
+    private void manageMobFootstepSounds(Mob mob) {
         // Execute this code once per 0.3 seconds
         if (AmbientManager.getTick() % AmbientManager.secondsToTicks(0.4f) != 0) {
             return;
@@ -36,8 +38,12 @@ public final class AmbientManager {
         }
     }
 
-    public void manageWind() {
+    private void manageWind() {
         windAmbient.playSound();
+    }
+
+    private void manageChirping() {
+        birdChirpAmbient.playSound();
     }
 
     public static boolean isInGame() {
@@ -91,6 +97,7 @@ public final class AmbientManager {
 
     public void onGameSecondTick() {
         manageWind();
+        manageChirping();
     }
 }
 
