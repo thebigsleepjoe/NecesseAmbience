@@ -1,11 +1,10 @@
 package ambiencemod;
 
 import ambiencemod.ambience.sounds.AmbientManager;
-import necesse.engine.Screen;
 import necesse.engine.modLoader.annotations.ModEntry;
 
 @ModEntry
-public class AmbienceMod {
+public class AmbientMod {
     public static AmbientManager ambientManager;
 
     public void init() {

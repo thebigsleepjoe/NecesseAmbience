@@ -9,10 +9,12 @@ import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
 
 public final class AmbientManager {
-    FootstepsAmbient footstepsAmbientNoise;
+    FootstepsAmbient footstepsAmbient;
+    WindAmbient windAmbient;
 
     public AmbientManager() {
-        footstepsAmbientNoise = new FootstepsAmbient();
+        footstepsAmbient = new FootstepsAmbient();
+        windAmbient = new WindAmbient();
     }
 
     public float getMobSpeedPct(Mob mob) {
@@ -30,11 +32,15 @@ public final class AmbientManager {
         float mobSpeedPct = getMobSpeedPct(mob);
         if (mobSpeedPct > 0.1f) {
             System.out.println("Playing footstep for " + mob.getDisplayName());
-            footstepsAmbientNoise.playSound(mob.x, mob.y, mobSpeedPct);
+            footstepsAmbient.playSound(mob.x, mob.y, mobSpeedPct);
         }
     }
 
-    public boolean isInGame() {
+    public void manageWind() {
+        windAmbient.playSound();
+    }
+
+    public static boolean isInGame() {
         State currentState = GlobalData.getCurrentState();
         return (currentState instanceof MainGame);
     }
@@ -83,5 +89,8 @@ public final class AmbientManager {
         return Screen.tickManager.getTotalTicks();
     }
 
+    public void onGameSecondTick() {
+        manageWind();
+    }
 }
 

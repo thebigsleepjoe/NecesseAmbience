@@ -1,8 +1,7 @@
 package ambiencemod.ambience.patches;
 
-import ambiencemod.AmbienceMod;
+import ambiencemod.AmbientMod;
 import necesse.engine.modLoader.annotations.ModMethodPatch;
-import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
 import net.bytebuddy.asm.Advice;
 
@@ -11,7 +10,7 @@ public class PlayerTickPatch {
 
     @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
     static boolean onEnter(@Advice.This PlayerMob mob) {
-        AmbienceMod.ambientManager.onMobTick(mob);
+        AmbientMod.ambientManager.onMobTick(mob);
         return false; // return false to not disrupt other code execution
     }
 
