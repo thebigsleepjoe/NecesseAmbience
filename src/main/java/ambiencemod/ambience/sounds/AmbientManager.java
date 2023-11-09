@@ -2,6 +2,7 @@ package ambiencemod.ambience.sounds;
 
 import ambiencemod.ambience.sounds.entities.BirdChirp;
 import ambiencemod.ambience.sounds.entities.CowChirp;
+import ambiencemod.ambience.sounds.entities.DuckChirp;
 import ambiencemod.ambience.sounds.entities.SheepChirp;
 import ambiencemod.ambience.sounds.footsteps.FootstepsGrass;
 import ambiencemod.ambience.sounds.forest.BirdChirpAmbient;
@@ -16,6 +17,7 @@ import necesse.entity.mobs.PlayerMob;
 import necesse.entity.mobs.friendly.CowMob;
 import necesse.entity.mobs.friendly.SheepMob;
 import necesse.entity.mobs.friendly.critters.BirdMob;
+import necesse.entity.mobs.friendly.critters.DuckMob;
 
 public final class AmbientManager {
     FootstepsGrass footstepsGrass;
@@ -27,6 +29,7 @@ public final class AmbientManager {
     BirdChirp birdChirp;
     CowChirp cowChirp;
     SheepChirp sheepChirp;
+    DuckChirp duckChirp;
 
     public AmbientManager() {
         footstepsGrass = new FootstepsGrass();
@@ -36,6 +39,7 @@ public final class AmbientManager {
         birdChirp = new BirdChirp();
         cowChirp = new CowChirp();
         sheepChirp = new SheepChirp();
+        duckChirp = new DuckChirp();
     }
 
     public float getMobSpeedPct(Mob mob) {
@@ -66,12 +70,15 @@ public final class AmbientManager {
     }
 
     private void manageMobChirps(Mob mob) {
+        // While this code may look unappealing and non-modular, it's a much simpler way to implement sounds.
         if (mob instanceof BirdMob) {
             birdChirp.onMobTick(mob);
         }else if (mob instanceof CowMob) {
             cowChirp.onMobTick(mob);
         }else if (mob instanceof SheepMob) {
             sheepChirp.onMobTick(mob);
+        }else if (mob instanceof DuckMob) {
+            duckChirp.onMobTick(mob);
         }
     }
 
