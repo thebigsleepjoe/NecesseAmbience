@@ -1,9 +1,8 @@
 package ambiencemod.ambience.sounds.entities;
 
 import necesse.entity.mobs.Mob;
-import necesse.entity.mobs.friendly.critters.BirdMob;
 
-public class BirdChirp extends EntityChirp {
+public class BirdChirp extends MobChirp {
     public BirdChirp() {
         super();
         this.setVolume(0.5f);

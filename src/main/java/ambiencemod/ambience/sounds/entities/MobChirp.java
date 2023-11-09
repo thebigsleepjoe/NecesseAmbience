@@ -9,9 +9,9 @@ import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
 
 // This class manages automatically playing "chirps" for animals nearby the player.
-public abstract class EntityChirp extends PositionalAmbient {
+public abstract class MobChirp extends PositionalAmbient {
 
-    public EntityChirp() {
+    public MobChirp() {
         super();
 
         this.setVolume(0.4f);
@@ -35,7 +35,7 @@ public abstract class EntityChirp extends PositionalAmbient {
     public void onMobTick(Mob mob) {
         Client client = AmbientMod.ambientManager.getClient();
         if (client == null) return;
-        if (distToClient(client, mob) > 256.0f) return;
+        if (distToClient(client, mob) > 512.0f) return;
 
         if (shouldPlaySound(mob)) {
             playSound(mob.x, mob.y);
