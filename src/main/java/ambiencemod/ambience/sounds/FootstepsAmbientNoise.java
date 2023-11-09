@@ -24,19 +24,19 @@ public class FootstepsAmbientNoise extends PositionalAmbientNoise {
             return SoundChance.NEVER.getChance();
         }
         else if (speedPct < 0.1) {
-            return SoundChance.ALMOST_NEVER.getChance();
-        }
-        else if (speedPct < 0.25) {
             return SoundChance.RARELY.getChance();
         }
-        else if (speedPct < 0.5) {
+        else if (speedPct < 0.25) {
             return SoundChance.FREQUENT.getChance();
         }
-        else if (speedPct < 0.75) {
+        else if (speedPct < 0.5) {
             return SoundChance.OFTEN.getChance();
         }
-        else if (speedPct < 0.9) {
+        else if (speedPct < 0.75) {
             return SoundChance.VERY_OFTEN.getChance();
+        }
+        else if (speedPct < 0.9) {
+            return SoundChance.ALWAYS.getChance();
         }
         else {
             return SoundChance.ALWAYS.getChance();
