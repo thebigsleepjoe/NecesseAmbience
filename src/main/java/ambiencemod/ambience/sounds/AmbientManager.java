@@ -5,15 +5,14 @@ import necesse.engine.Screen;
 import necesse.engine.network.client.Client;
 import necesse.engine.state.MainGame;
 import necesse.engine.state.State;
-import necesse.engine.util.GameMath;
 import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
 
 public final class AmbientManager {
-    FootstepsAmbientNoise footstepsAmbientNoise;
+    FootstepsAmbient footstepsAmbientNoise;
 
     public AmbientManager() {
-        footstepsAmbientNoise = new FootstepsAmbientNoise();
+        footstepsAmbientNoise = new FootstepsAmbient();
     }
 
     public float getMobSpeedPct(Mob mob) {

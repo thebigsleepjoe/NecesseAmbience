@@ -1,13 +1,12 @@
 package ambiencemod.ambience.sounds;
 
-import ambiencemod.AmbienceMod;
 import necesse.engine.Screen;
 import necesse.engine.sound.SoundEffect;
 import necesse.engine.util.GameRandom;
 import necesse.gfx.gameSound.GameSound;
 import java.util.ArrayList;
 
-public abstract class PositionalAmbientNoise {
+public abstract class PositionalAmbient {
     ArrayList<GameSound> sounds;
     float volume = 1.0f;
     float pitchRangeLow = 1.0f;
@@ -16,24 +15,24 @@ public abstract class PositionalAmbientNoise {
     int minTicksBetweenPlays = 0;
     long lastPlayTick = 0;
 
-    public PositionalAmbientNoise() {
+    public PositionalAmbient() {
         this.sounds = new ArrayList<>();
     }
 
-    public void SetVolume(float v) {
+    public void setVolume(float v) {
         this.volume = v;
     }
 
-    public void SetPitchRange(float low, float high) {
+    public void setPitchRange(float low, float high) {
         this.pitchRangeLow = low;
         this.pitchRangeHigh = high;
     }
 
-    public void SetChance(SoundChance c) {
+    public void setChance(SoundChance c) {
         this.chance = c;
     }
 
-    public void SetMinTicksBetweenPlays(int ticks) {
+    public void setMinTicksBetweenPlays(int ticks) {
         this.minTicksBetweenPlays = ticks;
     }
 
