@@ -2,6 +2,7 @@ package ambiencemod.ambience.sounds;
 
 import ambiencemod.ambience.sounds.entities.BirdChirp;
 import ambiencemod.ambience.sounds.entities.CowChirp;
+import ambiencemod.ambience.sounds.entities.SheepChirp;
 import ambiencemod.ambience.sounds.footsteps.FootstepsGrass;
 import ambiencemod.ambience.sounds.forest.BirdChirpAmbient;
 import ambiencemod.ambience.sounds.forest.WindAmbient;
@@ -13,6 +14,7 @@ import necesse.engine.state.State;
 import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
 import necesse.entity.mobs.friendly.CowMob;
+import necesse.entity.mobs.friendly.SheepMob;
 import necesse.entity.mobs.friendly.critters.BirdMob;
 
 public final class AmbientManager {
@@ -24,13 +26,16 @@ public final class AmbientManager {
     // Locational animal noises
     BirdChirp birdChirp;
     CowChirp cowChirp;
+    SheepChirp sheepChirp;
 
     public AmbientManager() {
         footstepsGrass = new FootstepsGrass();
         windAmbient = new WindAmbient();
         birdChirpAmbient = new BirdChirpAmbient();
+        // Locational animal chirps
         birdChirp = new BirdChirp();
         cowChirp = new CowChirp();
+        sheepChirp = new SheepChirp();
     }
 
     public float getMobSpeedPct(Mob mob) {
@@ -60,11 +65,13 @@ public final class AmbientManager {
         birdChirpAmbient.playSound();
     }
 
-    private void manageAnimalNoises(Mob mob) {
+    private void manageMobChirps(Mob mob) {
         if (mob instanceof BirdMob) {
             birdChirp.onMobTick(mob);
         }else if (mob instanceof CowMob) {
             cowChirp.onMobTick(mob);
+        }else if (mob instanceof SheepMob) {
+            sheepChirp.onMobTick(mob);
         }
     }
 
@@ -102,7 +109,7 @@ public final class AmbientManager {
         float distTo = distance(mob.x, mob.y, ply.x, ply.y);
         if (distTo < 800) { // Prevent overwhelming the sound engine
             this.manageMobFootstepSounds(mob);
-            this.manageAnimalNoises(mob);
+            this.manageMobChirps(mob);
         }
     }
 
