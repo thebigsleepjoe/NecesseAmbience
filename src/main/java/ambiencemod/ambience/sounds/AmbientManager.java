@@ -1,5 +1,6 @@
 package ambiencemod.ambience.sounds;
 
+import ambiencemod.ambience.sounds.entities.BirdChirp;
 import ambiencemod.ambience.sounds.footsteps.FootstepsGrass;
 import ambiencemod.ambience.sounds.forest.BirdChirpAmbient;
 import ambiencemod.ambience.sounds.forest.WindAmbient;
@@ -10,16 +11,22 @@ import necesse.engine.state.MainGame;
 import necesse.engine.state.State;
 import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
+import necesse.entity.mobs.friendly.critters.BirdMob;
 
 public final class AmbientManager {
     FootstepsGrass footstepsGrass;
     WindAmbient windAmbient;
+    // A global bird chirp sound
     BirdChirpAmbient birdChirpAmbient;
+
+    // A positional bird chirp sound
+    BirdChirp birdChirp;
 
     public AmbientManager() {
         footstepsGrass = new FootstepsGrass();
         windAmbient = new WindAmbient();
         birdChirpAmbient = new BirdChirpAmbient();
+        birdChirp = new BirdChirp();
     }
 
     public float getMobSpeedPct(Mob mob) {
@@ -47,6 +54,12 @@ public final class AmbientManager {
 
     private void manageChirping() {
         birdChirpAmbient.playSound();
+    }
+
+    private void manageAnimalNoises(Mob mob) {
+        if (mob instanceof BirdMob) {
+            birdChirp.onMobTick(mob);
+        }
     }
 
     public static boolean isInGame() {
@@ -83,6 +96,7 @@ public final class AmbientManager {
         float distTo = distance(mob.x, mob.y, ply.x, ply.y);
         if (distTo < 800) { // Prevent overwhelming the sound engine
             this.manageMobFootstepSounds(mob);
+            this.manageAnimalNoises(mob);
         }
     }
 
