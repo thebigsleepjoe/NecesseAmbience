@@ -8,7 +8,7 @@ public class AmbientMod {
     public static AmbientManager ambientManager;
 
     public void init() {
-        System.out.println("Hello world from ambience!");
+        System.out.println("AmbienceMod initialized");
     }
 
     public void initResources() {
