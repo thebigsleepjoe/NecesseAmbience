@@ -1,17 +1,17 @@
 package ambiencemod.ambience.sounds.environments;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
+import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.GlobalAmbient;
 import ambiencemod.ambience.sounds.PositionalAmbient;
-import necesse.engine.util.GameRandom;
+import necesse.entity.mobs.PlayerMob;
+import necesse.level.maps.biomes.Biome;
 
 public abstract class Environment {
     // A pretty name for this environment.
     public String name;
     // The biomes this environment applies to.
-    private HashMap<String, Boolean> biomes = new HashMap<String, Boolean>();
+    private HashMap<Class<? extends Biome>, Boolean> biomes = new HashMap<Class<? extends Biome>, Boolean>();
     // The constant ambient tracks that can play in this environment.
     private GlobalAmbient constantAmbience;
     // The occasional (global) ambient tracks that can play in this environment.
@@ -23,11 +23,11 @@ public abstract class Environment {
         this.name = name;
     }
 
-    public void addBiome(String biome) {
+    public void addBiome(Class<? extends Biome> biome) {
         biomes.put(biome, true);
     }
 
-    public boolean hasBiome(String biome) {
+    public boolean hasBiome(Class<? extends Biome> biome) {
         return biomes.containsKey(biome);
     }
 
@@ -58,6 +58,23 @@ public abstract class Environment {
     public void playPositionalAmbience() {
         if (positionalAmbience != null) {
             positionalAmbience.playSound();
+        }
+    }
+
+    public boolean isPlayerInEnvironment() {
+        PlayerMob playerMob = AmbientManager.getLocalPlayer();
+        if (playerMob == null || playerMob.isDisposed())
+            return false;
+        
+        Class<? extends Biome> biome = playerMob.getLevel().biome.getClass();
+        return hasBiome(biome);
+    }
+
+    public void manageEnvironmentIfApplicable() {
+        if (isPlayerInEnvironment()) {
+            playConstantAmbience();
+            playOccasionalAmbience();
+            playPositionalAmbience();
         }
     }
 }
