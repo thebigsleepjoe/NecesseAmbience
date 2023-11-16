@@ -1,8 +1,10 @@
 package ambiencemod.ambience.sounds;
 
 import necesse.engine.Screen;
+import necesse.engine.network.client.Client;
 import necesse.engine.sound.SoundEffect;
 import necesse.engine.util.GameRandom;
+import necesse.entity.mobs.PlayerMob;
 import necesse.gfx.gameSound.GameSound;
 import java.util.ArrayList;
 
@@ -64,12 +66,28 @@ public abstract class PositionalAmbient {
             }
         }
         // Test if we succeed the chance roll
-        if (this.chance != SoundChance.ALWAYS && (GameRandom.globalRandom.getFloatBetween(0.0f, 1.0f) > this.chance.getChance())) {
+        if (this.chance != SoundChance.ALWAYS
+                && (GameRandom.globalRandom.getFloatBetween(0.0f, 1.0f) > this.chance.getChance())) {
             return;
         }
         // Play the sound
         Screen.playSound(this.getRandomSound(), SoundEffect.effect(x, y)
                 .volume(this.volume)
                 .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)));
+    }
+
+    // Play a sound at a random position around the client.
+    public void playSound() {
+        Client client = AmbientManager.getClient();
+        PlayerMob player = client.getPlayer();
+        if (player == null || player.isDisposed())
+            return;
+        
+        // Pick a point on a circle around the radius
+        final float RADIUS = GameRandom.globalRandom.getFloatBetween(300.0f, 600.0f);
+        final float ANGLE = GameRandom.globalRandom.getFloatBetween(0.0f, 360.0f);
+        final float x = player.x + (float) Math.cos(ANGLE) * RADIUS;
+        final float y = player.y + (float) Math.sin(ANGLE) * RADIUS;
+        this.playSound(x, y);
     }
 }

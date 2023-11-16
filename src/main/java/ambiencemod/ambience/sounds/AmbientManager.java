@@ -87,14 +87,15 @@ public final class AmbientManager {
         return (currentState instanceof MainGame);
     }
 
-    public Client getClient() {
+    public static Client getClient() {
         State currentState = GlobalData.getCurrentState();
         if (currentState instanceof MainGame) {
-            return ((MainGame)currentState).getClient();
+            return ((MainGame) currentState).getClient();
         }
         return null;
     }
-    public PlayerMob getLocalPlayer() {
+    
+    public static PlayerMob getLocalPlayer() {
         Client client = getClient();
         if (client == null) return null;
         return client.getPlayer();
@@ -107,7 +108,7 @@ public final class AmbientManager {
 
     public void onMobTick(Mob mob) {
         if (!isInGame()) return;
-        PlayerMob ply = this.getLocalPlayer();
+        PlayerMob ply = AmbientManager.getLocalPlayer();
         if (ply == mob) { // end early, no need to calculate distance to self
             this.manageMobFootstepSounds(mob);
             return;
