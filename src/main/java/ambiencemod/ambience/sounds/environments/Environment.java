@@ -8,15 +8,16 @@ import necesse.entity.mobs.PlayerMob;
 import necesse.level.maps.biomes.Biome;
 
 public abstract class Environment {
-    // A pretty name for this environment.
+    /** A pretty name for this environment. */
     public String name;
-    // The biomes this environment applies to.
+    /** The biomes this environment applies to. */
     private HashMap<Class<? extends Biome>, Boolean> biomes = new HashMap<Class<? extends Biome>, Boolean>();
-    // The constant ambient tracks that can play in this environment.
-    private GlobalAmbient constantAmbience;
-    // The occasional (global) ambient tracks that can play in this environment.
-    private GlobalAmbient occasionalAmbience;
-    // The positional ambience tracks that can at random positions around the player in this environment.
+    /** The constant ambient tracks that can play in this environment. */
+    private GlobalAmbient background;
+    /** Day/night ambience */
+    private GlobalAmbient dayAmbient;
+    private GlobalAmbient nightAmbient;
+    /** The positional ambience tracks that can at random positions around the player in this environment. */
     private PositionalAmbient positionalAmbience;
 
     public Environment(String name) {
@@ -31,12 +32,16 @@ public abstract class Environment {
         return biomes.containsKey(biome);
     }
 
-    public void setConstantAmbience(GlobalAmbient constantAmbience) {
-        this.constantAmbience = constantAmbience;
+    public void setBackground(GlobalAmbient constantAmbience) {
+        this.background = constantAmbience;
     }
 
-    public void setOccasionalAmbience(GlobalAmbient occasionalAmbience) {
-        this.occasionalAmbience = occasionalAmbience;
+    public void setDayAmbience(GlobalAmbient dayAmbience) {
+        this.dayAmbient = dayAmbience;
+    }
+
+    public void setNightAmbience(GlobalAmbient nightAmbience) {
+        this.nightAmbient = nightAmbience;
     }
 
     public void setPositionalAmbience(PositionalAmbient positionalAmbience) {
@@ -44,14 +49,31 @@ public abstract class Environment {
     }
 
     public void playConstantAmbience() {
-        if (constantAmbience != null) {
-            constantAmbience.playSound();
+        if (background != null) {
+            background.playSound();
         }
     }
 
-    public void playOccasionalAmbience() {
-        if (occasionalAmbience != null) {
-            occasionalAmbience.playSound();
+    public boolean isDay() {
+        PlayerMob playerMob = AmbientManager.getLocalPlayer();
+        if (playerMob == null || playerMob.isDisposed())
+            return false;
+        return !playerMob.getWorldEntity().isNight();
+    }
+
+    public boolean isNight() {
+        return !isDay();
+    }
+
+    public void playTimeSpecificAmbience() {
+        if (isDay()) {
+            if (dayAmbient != null) {
+                dayAmbient.playSound();
+            }
+        } else if (isNight()) {
+            if (nightAmbient != null) {
+                nightAmbient.playSound();
+            }
         }
     }
 
@@ -65,15 +87,18 @@ public abstract class Environment {
         PlayerMob playerMob = AmbientManager.getLocalPlayer();
         if (playerMob == null || playerMob.isDisposed())
             return false;
-        
+
         Class<? extends Biome> biome = playerMob.getLevel().biome.getClass();
         return hasBiome(biome);
     }
 
-    public void manageEnvironmentIfApplicable() {
+    /**
+     * Play all sounds that are applicable to this environment.
+     */
+    public void playEnvironmentSoundsIfApplicable() {
         if (isPlayerInEnvironment()) {
             playConstantAmbience();
-            playOccasionalAmbience();
+            playTimeSpecificAmbience();
             playPositionalAmbience();
         }
     }
