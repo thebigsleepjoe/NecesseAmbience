@@ -1,7 +1,7 @@
 package ambiencemod.ambience.sounds;
 
-import necesse.engine.Screen;
 import necesse.engine.sound.GlobalSoundEffect;
+import necesse.engine.sound.SoundManager;
 import necesse.engine.sound.SoundPlayer;
 import necesse.engine.util.GameRandom;
 
@@ -53,7 +53,7 @@ public class GlobalAmbient extends PositionalAmbient {
             return;
         }
         // Play the sound
-        soundPlayer = Screen.playSound(this.getRandomSound(), GlobalSoundEffect.globalEffect()
+        soundPlayer = SoundManager.playSound(this.getRandomSound(), GlobalSoundEffect.globalEffect()
                         .volume(this.volume)
                         .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)))
                         .fadeIn(this.fadeInTime);

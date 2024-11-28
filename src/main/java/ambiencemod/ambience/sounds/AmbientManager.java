@@ -1,5 +1,6 @@
 package ambiencemod.ambience.sounds;
 
+import ambiencemod.AmbientMod;
 import ambiencemod.ambience.sounds.entities.BirdChirp;
 import ambiencemod.ambience.sounds.entities.CowChirp;
 import ambiencemod.ambience.sounds.entities.DuckChirp;
@@ -8,7 +9,6 @@ import ambiencemod.ambience.sounds.footsteps.FootstepsGrass;
 import ambiencemod.ambience.sounds.forest.BirdChirpAmbient;
 import ambiencemod.ambience.sounds.forest.WindAmbient;
 import necesse.engine.GlobalData;
-import necesse.engine.Screen;
 import necesse.engine.network.client.Client;
 import necesse.engine.state.MainGame;
 import necesse.engine.state.State;
@@ -20,6 +20,7 @@ import necesse.entity.mobs.friendly.critters.BirdMob;
 import necesse.entity.mobs.friendly.critters.DuckMob;
 
 public final class AmbientManager {
+    public static long tick = 0;
     FootstepsGrass footstepsGrass;
     WindAmbient windAmbient;
     // A global bird chirp sound
@@ -130,7 +131,7 @@ public final class AmbientManager {
     }
 
     public static long getTick() {
-        return Screen.tickManager.getTotalTicks();
+        return AmbientManager.tick;
     }
 
     public void onGameSecondTick() {

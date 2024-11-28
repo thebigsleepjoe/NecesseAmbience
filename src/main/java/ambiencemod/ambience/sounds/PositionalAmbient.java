@@ -1,11 +1,11 @@
 package ambiencemod.ambience.sounds;
 
-import necesse.engine.Screen;
 import necesse.engine.network.client.Client;
 import necesse.engine.sound.SoundEffect;
+import necesse.engine.sound.SoundManager;
 import necesse.engine.util.GameRandom;
 import necesse.entity.mobs.PlayerMob;
-import necesse.gfx.gameSound.GameSound;
+import necesse.engine.sound.gameSound.GameSound;
 import java.util.ArrayList;
 
 public abstract class PositionalAmbient {
@@ -47,7 +47,7 @@ public abstract class PositionalAmbient {
     }
 
     public GameSound getRandomSound() throws RuntimeException {
-        if (this.sounds.size() == 0) {
+        if (this.sounds.isEmpty()) {
             throw new RuntimeException("No sounds added to PositionalAmbientNoise");
         } else if (this.sounds.size() == 1) {
             // basic optimization
@@ -71,7 +71,7 @@ public abstract class PositionalAmbient {
             return;
         }
         // Play the sound
-        Screen.playSound(this.getRandomSound(), SoundEffect.effect(x, y)
+        SoundManager.playSound(this.getRandomSound(), SoundEffect.effect(x, y)
                 .volume(this.volume)
                 .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)));
     }
