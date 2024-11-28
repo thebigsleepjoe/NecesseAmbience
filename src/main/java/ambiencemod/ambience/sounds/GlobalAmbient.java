@@ -4,15 +4,26 @@ import necesse.engine.sound.GlobalSoundEffect;
 import necesse.engine.sound.SoundManager;
 import necesse.engine.sound.SoundPlayer;
 import necesse.engine.util.GameRandom;
+import necesse.entity.mobs.PlayerMob;
+import necesse.level.maps.Level;
+import necesse.level.maps.biomes.Biome;
+import net.bytebuddy.utility.nullability.MaybeNull;
+
+import java.util.ArrayList;
 
 public class GlobalAmbient extends PositionalAmbient {
 
+    public ArrayList<Class<? extends Biome>> biomes = new ArrayList<>();
+
+    @MaybeNull
     public SoundPlayer soundPlayer;
     public boolean waitUntilDone = false;
     public float fadeInTime = 0.0f;
     public float timeBetweenRepeats = 0.0f;
     private boolean wasJustPlayed = false;
     private float justPlayedTime = 0.0f;
+    public boolean mufflesIndoors = true;
+    private boolean muffled = false;
 
     public GlobalAmbient() {}
 
@@ -57,6 +68,84 @@ public class GlobalAmbient extends PositionalAmbient {
                         .volume(this.volume)
                         .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)))
                         .fadeIn(this.fadeInTime);
+    }
+
+    public void startOrContinue() {
+        if (this.soundPlayer != null && this.soundPlayer.isPlaying()) return;
+
+        this.playSound();
+    }
+
+    public void stopPlaying() {
+        if (this.soundPlayer == null) return;
+        if (!this.soundPlayer.isPlaying()) return;
+
+        this.destroyPlayer();
+    }
+
+    private boolean muffle(PlayerMob ply) {
+        if (this.muffled) return false; // already muffled...
+        if (!this.mufflesIndoors) return false;
+        if (this.soundPlayer == null) return false;
+        if (!this.soundPlayer.isPlaying()) return false;
+
+        Level lvl = ply.getLevel();
+        if (lvl.isOutside(ply.getTileX(), ply.getTileY())) return false;
+
+        final float origVol = this.volume;
+
+        // This is kinda a hack and probably really dumb
+        // ...but I kinda don't care!
+        this.volume = origVol * 0.7f;
+        this.destroyPlayer();
+        this.playSound();
+        this.volume = origVol;
+
+        return true;
+    }
+
+    public boolean canRun(PlayerMob ply) {
+        throw new RuntimeException("Must override GlobalAmbient canRun function");
+    }
+
+    public void destroyPlayer() {
+        if (this.soundPlayer == null) return;
+        this.soundPlayer.pause();
+        this.soundPlayer.dispose();
+        this.soundPlayer = null;
+        this.muffled = false;
+    }
+
+    public void update(PlayerMob ply) {
+        if (this.soundPlayer == null) return;
+
+        if (this.mufflesIndoors) {
+            final boolean wasMuffled = this.muffled;
+            final boolean isMuffled = this.muffle(ply);
+
+            this.muffled = isMuffled;
+
+            if (wasMuffled && !isMuffled) {
+                // if we aren't muffled anymore, restart the player.
+                this.destroyPlayer();
+                this.playSound();
+            }
+        }
+
+        if (!this.soundPlayer.isDone() || !this.soundPlayer.isPlaying()) return;
+
+        this.destroyPlayer();
+    }
+
+    public boolean isInBiomes(PlayerMob ply) {
+        Level lvl = ply.getLevel();
+        Biome biome = lvl.biome;
+
+        for (Class<? extends Biome> aClass : biomes) {
+            if (biome.getClass().equals(aClass)) return true;
+        }
+
+        return false;
     }
 
     protected void setTimeBetweenRepeats(float v) {

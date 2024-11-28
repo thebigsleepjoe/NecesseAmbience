@@ -1,7 +1,7 @@
 package ambiencemod.ambience.sounds.environments;
 
-import ambiencemod.ambience.sounds.forest.BirdChirpAmbient;
-import ambiencemod.ambience.sounds.forest.WindAmbient;
+import ambiencemod.ambience.sounds.global.BirdChirpAmbient;
+import ambiencemod.ambience.sounds.global.WindAmbient;
 import necesse.level.maps.biomes.forest.ForestBiome;
 
 public class ForestEnvironment extends Environment {

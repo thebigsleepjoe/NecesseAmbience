@@ -1,13 +1,12 @@
 package ambiencemod.ambience.sounds;
 
-import ambiencemod.AmbientMod;
 import ambiencemod.ambience.sounds.entities.BirdChirp;
 import ambiencemod.ambience.sounds.entities.CowChirp;
 import ambiencemod.ambience.sounds.entities.DuckChirp;
 import ambiencemod.ambience.sounds.entities.SheepChirp;
 import ambiencemod.ambience.sounds.footsteps.FootstepsGrass;
-import ambiencemod.ambience.sounds.forest.BirdChirpAmbient;
-import ambiencemod.ambience.sounds.forest.WindAmbient;
+import ambiencemod.ambience.sounds.global.BirdChirpAmbient;
+import ambiencemod.ambience.sounds.global.WindAmbient;
 import necesse.engine.GlobalData;
 import necesse.engine.network.client.Client;
 import necesse.engine.state.MainGame;
@@ -19,12 +18,12 @@ import necesse.entity.mobs.friendly.SheepMob;
 import necesse.entity.mobs.friendly.critters.BirdMob;
 import necesse.entity.mobs.friendly.critters.DuckMob;
 
+import java.util.ArrayList;
+
 public final class AmbientManager {
     public static long tick = 0;
     FootstepsGrass footstepsGrass;
-    WindAmbient windAmbient;
-    // A global bird chirp sound
-    BirdChirpAmbient birdChirpAmbient;
+    ArrayList<GlobalAmbient> ambientTracks = new ArrayList<GlobalAmbient>();
 
     // Locational animal noises
     BirdChirp birdChirp;
@@ -34,18 +33,31 @@ public final class AmbientManager {
 
     public AmbientManager() {
         footstepsGrass = new FootstepsGrass();
-        windAmbient = new WindAmbient();
-        birdChirpAmbient = new BirdChirpAmbient();
         // Locational animal chirps
         birdChirp = new BirdChirp();
         cowChirp = new CowChirp();
         sheepChirp = new SheepChirp();
         duckChirp = new DuckChirp();
+
+       this.ambientTracks.add(new WindAmbient());
+       this.ambientTracks.add(new BirdChirpAmbient());
     }
 
     public float getMobSpeedPct(Mob mob) {
         //return (mob.getCurrentSpeed() / mob.getSpeed());
         return (mob.getCurrentSpeed() / 35.0f); // 35.0f is baseline human speed, makes footstep speed more consistent. basically 2x step sounds per second
+    }
+
+    private void manageAmbientTracks(PlayerMob ply) {
+        for (GlobalAmbient track : this.ambientTracks) {
+            track.update(ply);
+
+            if (track.canRun(ply)) {
+                track.startOrContinue();
+            } else {
+                track.stopPlaying();
+            }
+        }
     }
 
     private void manageMobFootstepSounds(Mob mob) {
@@ -57,17 +69,9 @@ public final class AmbientManager {
 
         float mobSpeedPct = getMobSpeedPct(mob);
         if (mobSpeedPct > 0.1f) {
-            System.out.println("Playing footstep for " + mob.getDisplayName());
+            // System.out.println("Playing footstep for " + mob.getDisplayName());
             footstepsGrass.playSound(mob.x, mob.y, mobSpeedPct);
         }
-    }
-
-    private void manageWind() {
-        windAmbient.playSound();
-    }
-
-    private void manageChirping() {
-        birdChirpAmbient.playSound();
     }
 
     private void manageMobChirps(Mob mob) {
@@ -110,12 +114,17 @@ public final class AmbientManager {
     public void onMobTick(Mob mob) {
         if (!isInGame()) return;
         PlayerMob ply = AmbientManager.getLocalPlayer();
+        if (ply == null) return;
+
         if (ply == mob) { // end early, no need to calculate distance to self
             this.manageMobFootstepSounds(mob);
             return;
         }
-        if (ply == null) return;
+
+        if (!mob.isSamePlace(ply)) return;
+
         float distTo = distance(mob.x, mob.y, ply.x, ply.y);
+
         if (distTo < 800) { // Prevent overwhelming the sound engine
             this.manageMobFootstepSounds(mob);
             this.manageMobChirps(mob);
@@ -135,8 +144,8 @@ public final class AmbientManager {
     }
 
     public void onGameSecondTick() {
-        manageWind();
-        manageChirping();
+        PlayerMob ply = AmbientManager.getLocalPlayer();
+        this.manageAmbientTracks(ply);
     }
 }
 
