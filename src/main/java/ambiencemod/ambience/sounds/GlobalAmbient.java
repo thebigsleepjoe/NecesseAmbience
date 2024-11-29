@@ -90,6 +90,7 @@ public class GlobalAmbient extends PositionalAmbient {
         if (!this.soundPlayer.isPlaying()) return false;
 
         Level lvl = ply.getLevel();
+        if (lvl == null) return false;
         if (lvl.isOutside(ply.getTileX(), ply.getTileY())) return false;
 
         final float origVol = this.volume;
@@ -99,6 +100,7 @@ public class GlobalAmbient extends PositionalAmbient {
         this.volume = origVol * 0.7f;
         this.destroyPlayer();
         this.playSound();
+        this.muffled = true;
         this.volume = origVol;
 
         return true;
@@ -122,8 +124,6 @@ public class GlobalAmbient extends PositionalAmbient {
         if (this.mufflesIndoors) {
             final boolean wasMuffled = this.muffled;
             final boolean isMuffled = this.muffle(ply);
-
-            this.muffled = isMuffled;
 
             if (wasMuffled && !isMuffled) {
                 // if we aren't muffled anymore, restart the player.
