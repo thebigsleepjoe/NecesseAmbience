@@ -23,7 +23,7 @@ public class GlobalAmbient extends PositionalAmbient {
     private boolean wasJustPlayed = false;
     private float justPlayedTime = 0.0f;
     public boolean mufflesIndoors = true;
-    private boolean muffled = false;
+    private boolean isMuffled = false;
 
     public GlobalAmbient() {}
 
@@ -83,27 +83,22 @@ public class GlobalAmbient extends PositionalAmbient {
         this.destroyPlayer();
     }
 
-    private boolean muffle(PlayerMob ply) {
-        if (this.muffled) return false; // already muffled...
-        if (!this.mufflesIndoors) return false;
-        if (this.soundPlayer == null) return false;
-        if (!this.soundPlayer.isPlaying()) return false;
+    public void handleMuffle(PlayerMob ply) {
+        if (!this.mufflesIndoors) return;
+        if (this.soundPlayer == null) return;
+        if (!this.soundPlayer.isPlaying()) return;
 
         Level lvl = ply.getLevel();
-        if (lvl == null) return false;
-        if (lvl.isOutside(ply.getTileX(), ply.getTileY())) return false;
+        if (lvl == null) return;
 
-        final float origVol = this.volume;
+        final boolean shouldMuffle = !lvl.isOutside(ply.getTileX(), ply.getTileY());
 
-        // This is kinda a hack and probably really dumb
-        // ...but I kinda don't care!
-        this.volume = origVol * 0.7f;
-        this.destroyPlayer();
-        this.playSound();
-        this.muffled = true;
-        this.volume = origVol;
+        if (shouldMuffle == this.isMuffled) return; // No need to do anything. We are where we need to be.
 
-        return true;
+        final float gainAmount = 5.0f; // I think this is dB
+
+        this.isMuffled = shouldMuffle;
+        this.soundPlayer.alSetGain(shouldMuffle ? -gainAmount : 0.0f);
     }
 
     public boolean canRun(PlayerMob ply) {
@@ -115,22 +110,13 @@ public class GlobalAmbient extends PositionalAmbient {
         this.soundPlayer.pause();
         this.soundPlayer.dispose();
         this.soundPlayer = null;
-        this.muffled = false;
+        this.isMuffled = false;
     }
 
     public void update(PlayerMob ply) {
         if (this.soundPlayer == null) return;
 
-        if (this.mufflesIndoors) {
-            final boolean wasMuffled = this.muffled;
-            final boolean isMuffled = this.muffle(ply);
-
-            if (wasMuffled && !isMuffled) {
-                // if we aren't muffled anymore, restart the player.
-                this.destroyPlayer();
-                this.playSound();
-            }
-        }
+        this.handleMuffle(ply);
 
         if (!this.soundPlayer.isDone() || !this.soundPlayer.isPlaying()) return;
 
