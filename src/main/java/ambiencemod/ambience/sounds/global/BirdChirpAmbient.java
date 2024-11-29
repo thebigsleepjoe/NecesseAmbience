@@ -33,6 +33,7 @@ public class BirdChirpAmbient extends GlobalAmbient {
 
     public boolean canRun(PlayerMob ply) {
         Level lvl = ply.getLevel();
+        if (lvl == null) return false;
 
         if (lvl.isCave) return false;
         if (lvl.getWorldEntity().isNight()) return false;

@@ -21,6 +21,8 @@ public class WindAmbient extends GlobalAmbient {
     public boolean canRun(PlayerMob ply) {
         Level lvl = ply.getLevel();
 
+        if (lvl == null) return false;
+
         return (!lvl.isCave);
         // if (!lvl.isOutside(ply.getTileX(), ply.getTileY())) return false;
     }
