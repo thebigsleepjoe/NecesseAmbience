@@ -5,6 +5,7 @@ import ambiencemod.ambience.sounds.entities.CowChirp;
 import ambiencemod.ambience.sounds.entities.DuckChirp;
 import ambiencemod.ambience.sounds.entities.SheepChirp;
 import ambiencemod.ambience.sounds.footsteps.FootstepsGrass;
+import ambiencemod.ambience.sounds.footsteps.FootstepsManager;
 import ambiencemod.ambience.sounds.global.BirdChirpAmbient;
 import ambiencemod.ambience.sounds.global.WindAmbient;
 import necesse.engine.GlobalData;
@@ -22,8 +23,8 @@ import java.util.ArrayList;
 
 public final class AmbientManager {
     public static long tick = 0;
-    FootstepsGrass footstepsGrass;
     ArrayList<GlobalAmbient> ambientTracks = new ArrayList<GlobalAmbient>();
+    FootstepsManager footstepsManager;
 
     // Locational animal noises
     BirdChirp birdChirp;
@@ -32,7 +33,8 @@ public final class AmbientManager {
     DuckChirp duckChirp;
 
     public AmbientManager() {
-        footstepsGrass = new FootstepsGrass();
+        this.footstepsManager = new FootstepsManager();
+
         // Locational animal chirps
         birdChirp = new BirdChirp();
         cowChirp = new CowChirp();
@@ -69,8 +71,8 @@ public final class AmbientManager {
 
         float mobSpeedPct = getMobSpeedPct(mob);
         if (mobSpeedPct > 0.1f) {
+            this.footstepsManager.onFootstep(mob);
             // System.out.println("Playing footstep for " + mob.getDisplayName());
-            footstepsGrass.playSound(mob.x, mob.y, mobSpeedPct);
         }
     }
 
