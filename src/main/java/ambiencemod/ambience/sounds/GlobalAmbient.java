@@ -19,9 +19,6 @@ public class GlobalAmbient extends PositionalAmbient {
     public SoundPlayer soundPlayer;
     public boolean waitUntilDone = false;
     public float fadeInTime = 0.0f;
-    public float timeBetweenRepeats = 0.0f;
-    private boolean wasJustPlayed = false;
-    private float justPlayedTime = 0.0f;
     public boolean mufflesIndoors = true;
     private boolean isMuffled = false;
 
@@ -39,54 +36,41 @@ public class GlobalAmbient extends PositionalAmbient {
     }
 
     public void playSound() {
-        // Test if we're already playing audio (if applicable).
-        if (this.waitUntilDone && this.soundPlayer != null && (!this.soundPlayer.isDone() && !this.soundPlayer.isDisposed())) {
-            this.wasJustPlayed = true;
-            this.justPlayedTime = this.getCurrentTimeSecs();
-            return;
-        }
-        if (wasJustPlayed && (this.getCurrentTimeSecs() - this.justPlayedTime) < this.timeBetweenRepeats) {
-            return;
-        } else {
-            this.wasJustPlayed = false; // Reset the flag
-        }
-
-        // Test if we succeed the min ticks between plays
-        if (this.minTicksBetweenPlays != 0) {
-            if (AmbientManager.getTick() - this.lastPlayTick < this.minTicksBetweenPlays) {
-                return;
-            } else {
-                this.lastPlayTick = AmbientManager.getTick();
-            }
-        }
-        // Test if we succeed the chance roll
         if (this.chance != SoundChance.ALWAYS && (GameRandom.globalRandom.getFloatBetween(0.0f, 1.0f) > this.chance.getChance())) {
             return;
         }
-        // Play the sound
-        soundPlayer = SoundManager.playSound(this.getRandomSound(), GlobalSoundEffect.globalEffect()
+
+        if (this.soundPlayer != null && this.isPlaying() && !this.isDone()) {
+            return;
+        }
+
+        this.soundPlayer = SoundManager.playSound(this.getRandomSound(), GlobalSoundEffect.globalEffect()
                         .volume(this.volume)
                         .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)))
                         .fadeIn(this.fadeInTime);
     }
 
-    public void startOrContinue() {
-        if (this.soundPlayer != null && this.soundPlayer.isPlaying()) return;
+    // NOTE: this is a fn because the SoundPlayer class does NOT yield the correct value of .isDone().
+    // Because of this, we must check manually how many seconds remain in the clip.
+    public boolean isDone() {
+        return this.soundPlayer == null ? false : this.soundPlayer.getSecondsLeft() < 0.1f;
+    }
 
-        this.playSound();
+    public boolean isPlaying() {
+        return this.soundPlayer == null ? false: this.soundPlayer.isPlaying();
     }
 
     public void stopPlaying() {
         if (this.soundPlayer == null) return;
-        if (!this.soundPlayer.isPlaying()) return;
 
-        this.destroyPlayer();
+        this.soundPlayer.pause();
+        this.soundPlayer.setPosition(0.0f);
     }
 
     public void handleMuffle(PlayerMob ply) {
         if (!this.mufflesIndoors) return;
         if (this.soundPlayer == null) return;
-        if (!this.soundPlayer.isPlaying()) return;
+        if (!this.isPlaying()) return;
 
         Level lvl = ply.getLevel();
         if (lvl == null) return;
@@ -105,6 +89,7 @@ public class GlobalAmbient extends PositionalAmbient {
         throw new RuntimeException("Must override GlobalAmbient canRun function");
     }
 
+    @Deprecated /* this shouldn't be used unless in very specific circumstances */
     public void destroyPlayer() {
         if (this.soundPlayer == null) return;
         this.soundPlayer.pause();
@@ -114,13 +99,19 @@ public class GlobalAmbient extends PositionalAmbient {
     }
 
     public void update(PlayerMob ply) {
-        if (this.soundPlayer == null) return;
+        // note: this is only called if canRun() == true
+        if (this.soundPlayer == null) {
+            this.playSound();
+            return;
+        }
 
         this.handleMuffle(ply);
 
-        if (!this.soundPlayer.isDone() || !this.soundPlayer.isPlaying()) return;
+        final boolean finished = !this.isPlaying() || this.isDone();
 
-        this.destroyPlayer();
+        if (finished) {
+            this.playSound();
+        }
     }
 
     public boolean isInBiomes(PlayerMob ply) {
@@ -134,7 +125,7 @@ public class GlobalAmbient extends PositionalAmbient {
         return false;
     }
 
+    @Deprecated
     protected void setTimeBetweenRepeats(float v) {
-        this.timeBetweenRepeats = v;
     }
 }

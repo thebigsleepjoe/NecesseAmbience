@@ -4,7 +4,6 @@ import ambiencemod.ambience.sounds.entities.BirdChirp;
 import ambiencemod.ambience.sounds.entities.CowChirp;
 import ambiencemod.ambience.sounds.entities.DuckChirp;
 import ambiencemod.ambience.sounds.entities.SheepChirp;
-import ambiencemod.ambience.sounds.footsteps.FootstepsGrass;
 import ambiencemod.ambience.sounds.footsteps.FootstepsManager;
 import ambiencemod.ambience.sounds.global.BirdChirpAmbient;
 import ambiencemod.ambience.sounds.global.WindAmbient;
@@ -52,10 +51,8 @@ public final class AmbientManager {
 
     private void manageAmbientTracks(PlayerMob ply) {
         for (GlobalAmbient track : this.ambientTracks) {
-            track.update(ply);
-
             if (track.canRun(ply)) {
-                track.startOrContinue();
+                track.update(ply);
             } else {
                 track.stopPlaying();
             }
