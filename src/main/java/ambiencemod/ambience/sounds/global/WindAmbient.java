@@ -16,6 +16,7 @@ public class WindAmbient extends GlobalAmbient {
         this.setTimeBetweenRepeats(5.0f);
 
         this.addSoundPath("global/Wind1.ogg");
+        this.addSoundPath("global/Wind2.ogg");
     }
 
     public boolean canRun(PlayerMob ply) {
