@@ -1,5 +1,6 @@
 package ambiencemod.ambience.sounds;
 
+import ambiencemod.ambience.patches.SettingsFormPatch;
 import necesse.engine.network.client.Client;
 import necesse.engine.sound.SoundEffect;
 import necesse.engine.sound.SoundManager;
@@ -46,6 +47,14 @@ public abstract class PositionalAmbient {
         this.addSound(GameSound.fromFile(soundPath));
     }
 
+    public float getVolumeModPct() {
+        return SettingsFormPatch.footstepsVolumePct;
+    }
+
+    public float getVolume() {
+        return this.volume * this.getVolumeModPct();
+    }
+
     public GameSound getRandomSound() throws RuntimeException {
         if (this.sounds.isEmpty()) {
             throw new RuntimeException("No sounds added to PositionalAmbientNoise");
@@ -72,7 +81,7 @@ public abstract class PositionalAmbient {
         }
         // Play the sound
         SoundManager.playSound(this.getRandomSound(), SoundEffect.effect(x, y)
-                .volume(this.volume)
+                .volume(this.getVolume())
                 .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)));
     }
 
