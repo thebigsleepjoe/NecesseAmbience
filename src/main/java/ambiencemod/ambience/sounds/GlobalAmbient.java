@@ -1,5 +1,6 @@
 package ambiencemod.ambience.sounds;
 
+import ambiencemod.ambience.patches.SettingsFormPatch;
 import necesse.engine.sound.GlobalSoundEffect;
 import necesse.engine.sound.SoundManager;
 import necesse.engine.sound.SoundPlayer;
@@ -48,6 +49,10 @@ public class GlobalAmbient extends PositionalAmbient {
                         .volume(this.volume)
                         .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)))
                         .fadeIn(this.fadeInTime);
+    }
+
+    public float getVolumeModPct() {
+        return SettingsFormPatch.ambienceVolumePct;
     }
 
     // NOTE: this is a fn because the SoundPlayer class does NOT yield the correct value of .isDone().
