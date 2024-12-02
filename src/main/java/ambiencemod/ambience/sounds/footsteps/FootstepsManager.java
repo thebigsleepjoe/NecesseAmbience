@@ -39,6 +39,11 @@ public class FootstepsManager {
         tileHashMap.put(SnowRockTile.class, stony);
         tileHashMap.put(SpiderNestTile.class, stony);
         tileHashMap.put(SwampRockTile.class, stony);
+
+        // WATER
+        FootstepsWater watery = new FootstepsWater();
+        tileHashMap.put(LiquidTile.class, watery);
+        tileHashMap.put(WaterTile.class, watery);
     }
 
     public void onFootstep(Mob mob) {
