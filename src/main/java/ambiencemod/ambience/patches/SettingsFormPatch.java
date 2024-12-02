@@ -13,6 +13,7 @@ import necesse.gfx.forms.events.FormInputEvent;
 import necesse.gfx.forms.position.FormPositionContainer;
 import necesse.gfx.forms.presets.SettingsForm;
 import net.bytebuddy.asm.Advice;
+import net.bytebuddy.utility.nullability.MaybeNull;
 
 import java.io.File;
 
@@ -20,6 +21,9 @@ import java.io.File;
 public class SettingsFormPatch {
     public static FormLocalSlider ambienceSlider;
     public static FormLocalSlider footstepsSlider;
+
+    @MaybeNull
+    public static SettingsForm currentSettingsForm;
 
     public static float ambienceVolumePct = 0.5f;
     public static float footstepsVolumePct = 0.5f;
@@ -33,6 +37,13 @@ public class SettingsFormPatch {
         }
 
         saveCustomSettings();
+
+        // make the 'Save' button light up, tho it's decorative in this case.
+        if (currentSettingsForm != null) {
+            currentSettingsForm.setSaveActive(true);
+        } else {
+            System.err.println("currentSettingsForm is null.");
+        }
     };
 
     public static SaveData getCustomSettings() {
@@ -71,10 +82,14 @@ public class SettingsFormPatch {
 
     @Advice.OnMethodExit
     static void onExit(
+            @Advice.This SettingsForm settingsForm,
             @Advice.FieldValue("soundContent") FormContentBox soundContent,
             @Advice.FieldValue("musicVolume") FormLocalSlider musicVolume,
             @Advice.FieldValue(value = "soundContentHeight", readOnly = false) int soundContentHeight
     ) {
+        // for onChanged
+        currentSettingsForm = settingsForm;
+
         // Create the custom slider (set the Y value later)
         ambienceSlider = soundContent.addComponent(new FormLocalSlider(
                 "settingsui",
