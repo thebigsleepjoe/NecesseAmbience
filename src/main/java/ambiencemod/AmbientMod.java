@@ -1,5 +1,6 @@
 package ambiencemod;
 
+import ambiencemod.ambience.patches.SettingsFormPatch;
 import ambiencemod.ambience.sounds.AmbientManager;
 import necesse.engine.modLoader.annotations.ModEntry;
 
@@ -9,6 +10,7 @@ public class AmbientMod {
 
     public void init() {
         System.out.println("AmbienceMod initialized");
+        SettingsFormPatch.loadCustomSettings();
     }
 
     public void initResources() {
