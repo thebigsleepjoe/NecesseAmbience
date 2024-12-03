@@ -5,7 +5,7 @@ import necesse.engine.modLoader.annotations.ModMethodPatch;
 import necesse.entity.mobs.PlayerMob;
 import net.bytebuddy.asm.Advice;
 
-@ModMethodPatch(target = PlayerMob.class, name = "serverTick", arguments = {})
+@ModMethodPatch(target = PlayerMob.class, name = "clientTick", arguments = {})
 public class PlayerTickPatch {
 
     @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
