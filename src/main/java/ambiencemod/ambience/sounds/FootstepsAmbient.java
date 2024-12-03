@@ -7,7 +7,7 @@ public abstract class FootstepsAmbient extends PositionalAmbient {
         super();
         this.setChance(SoundChance.ALWAYS);
         this.setVolume(1.0f);
-        this.setPitchRange(0.6f, 0.8f);
+        this.setPitchRange(0.8f, 1.2f);
         this.setMinTicksBetweenPlays(0); // This is managed elsewhere.
 
         // Add the sound paths
