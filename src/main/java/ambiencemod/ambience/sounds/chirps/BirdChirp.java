@@ -1,4 +1,4 @@
-package ambiencemod.ambience.sounds.entities;
+package ambiencemod.ambience.sounds.chirps;
 
 import ambiencemod.ambience.sounds.SoundChance;
 import necesse.engine.util.GameRandom;

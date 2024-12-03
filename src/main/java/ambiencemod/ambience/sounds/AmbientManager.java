@@ -1,9 +1,9 @@
 package ambiencemod.ambience.sounds;
 
-import ambiencemod.ambience.sounds.entities.BirdChirp;
-import ambiencemod.ambience.sounds.entities.CowChirp;
-import ambiencemod.ambience.sounds.entities.DuckChirp;
-import ambiencemod.ambience.sounds.entities.SheepChirp;
+import ambiencemod.ambience.sounds.chirps.BirdChirp;
+import ambiencemod.ambience.sounds.chirps.CowChirp;
+import ambiencemod.ambience.sounds.chirps.DuckChirp;
+import ambiencemod.ambience.sounds.chirps.SheepChirp;
 import ambiencemod.ambience.sounds.footsteps.FootstepsManager;
 import ambiencemod.ambience.sounds.global.BirdChirpAmbient;
 import ambiencemod.ambience.sounds.global.WindAmbient;

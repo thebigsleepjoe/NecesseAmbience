@@ -1,4 +1,4 @@
-package ambiencemod.ambience.sounds.entities;
+package ambiencemod.ambience.sounds.chirps;
 
 import ambiencemod.AmbientMod;
 import ambiencemod.ambience.sounds.AmbientManager;
