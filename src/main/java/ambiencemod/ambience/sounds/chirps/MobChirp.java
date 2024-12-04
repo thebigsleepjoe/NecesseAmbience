@@ -5,6 +5,7 @@ import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.PositionalAmbient;
 import ambiencemod.ambience.sounds.SoundChance;
 import necesse.engine.network.client.Client;
+import necesse.engine.sound.gameSound.GameSound;
 import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
 
@@ -17,7 +18,13 @@ public abstract class MobChirp extends PositionalAmbient {
         this.setVolume(0.4f);
         this.setPitchRange(0.8f, 1.2f);
         this.setMinTicksBetweenPlays(AmbientManager.secondsToTicks(5.0f));
-        this.setChance(SoundChance.RARELY);
+        this.setChance(SoundChance.ALMOST_NEVER);
+    }
+
+    @Override
+    public float getVolumeModPct() {
+        // overridden because this otherwise gets scaled with the footsteps volume slider.
+       return 1.0f;
     }
 
     public boolean shouldPlaySound(Mob mob) {
