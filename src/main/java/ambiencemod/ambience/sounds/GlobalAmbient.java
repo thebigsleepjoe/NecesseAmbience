@@ -65,11 +65,18 @@ public class GlobalAmbient extends PositionalAmbient {
         return this.soundPlayer == null ? false: this.soundPlayer.isPlaying();
     }
 
-    public void stopPlaying() {
+    public void restartPlayer() {
         if (this.soundPlayer == null) return;
 
-        this.soundPlayer.pause();
         this.soundPlayer.setPosition(0.0f);
+    }
+
+    public void stopPlayer() {
+        if (this.soundPlayer == null || this.soundPlayer.isDisposed()) return;
+
+        // we dispose here instead of just restartPlayer because it will allow a new sound to play
+        this.soundPlayer.dispose();
+        this.soundPlayer = null;
     }
 
     public void handleMuffle(PlayerMob ply) {

@@ -54,7 +54,7 @@ public final class AmbientManager {
             if (track.canRun(ply)) {
                 track.update(ply);
             } else {
-                track.stopPlaying();
+                track.stopPlayer();
             }
         }
     }
