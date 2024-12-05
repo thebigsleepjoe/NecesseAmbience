@@ -46,7 +46,7 @@ public class GlobalAmbient extends PositionalAmbient {
         }
 
         this.soundPlayer = SoundManager.playSound(this.getRandomSound(), GlobalSoundEffect.globalEffect()
-                        .volume(this.volume)
+                        .volume(this.getVolume())
                         .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)))
                         .fadeIn(this.fadeInTime);
     }
