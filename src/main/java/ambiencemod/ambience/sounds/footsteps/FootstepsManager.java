@@ -16,19 +16,21 @@ public class FootstepsManager {
     public FootstepsWater watery;
     public FootstepsSand sandy;
     public FootstepsWood woody;
+    public FootstepsMud muddy;
+    public FootstepsSnow snowy;
 
     public FootstepsManager() {
         // GRASSY
         this.grassy = new FootstepsGrass();
         tileHashMap.put(GrassTile.class, grassy);
         tileHashMap.put(OvergrownPlainsGrassTile.class, grassy);
-        tileHashMap.put(FarmlandTile.class, grassy);
         tileHashMap.put(SimpleTerrainTile.class, grassy);
         tileHashMap.put(SwampGrassTile.class, grassy);
         tileHashMap.put(PlainsGrassTile.class, grassy);
 
         // STONY
         this.stony = new FootstepsStone();
+        tileHashMap.put(CrystalTile.class, stony);
         tileHashMap.put(DeepRockTile.class, stony);
         tileHashMap.put(DeepSandstoneTile.class, stony);
         tileHashMap.put(DeepSnowRockTile.class, stony);
@@ -62,6 +64,16 @@ public class FootstepsManager {
         tileHashMap.put(CrystalGravelTile.class, sandy);
         tileHashMap.put(GravelTile.class, sandy);
         tileHashMap.put(SandGravelTile.class, sandy);
+
+        // SNOWY
+        this.snowy = new FootstepsSnow();
+        tileHashMap.put(SnowTile.class, snowy);
+
+        // MUDDY
+        this.muddy = new FootstepsMud();
+        tileHashMap.put(MudTile.class, muddy);
+        tileHashMap.put(SlimeLiquidTile.class, muddy);
+        tileHashMap.put(FarmlandTile.class, muddy);
     }
 
     public void onFootstep(Mob mob) {
