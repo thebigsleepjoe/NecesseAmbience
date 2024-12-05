@@ -49,6 +49,12 @@ public final class AmbientManager {
         return (mob.getCurrentSpeed() / 35.0f); // 35.0f is baseline human speed, makes footstep speed more consistent. basically 2x step sounds per second
     }
 
+    public void stopGlobalTracks() {
+        for (GlobalAmbient track : this.ambientTracks) {
+            track.stopPlayer();
+        }
+    }
+
     private void manageAmbientTracks(PlayerMob ply) {
         for (GlobalAmbient track : this.ambientTracks) {
             if (track.canRun(ply)) {
