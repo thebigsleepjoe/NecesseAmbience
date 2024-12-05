@@ -15,6 +15,7 @@ public class FootstepsManager {
     public FootstepsStone stony;
     public FootstepsWater watery;
     public FootstepsSand sandy;
+    public FootstepsWood woody;
 
     public FootstepsManager() {
         // GRASSY
@@ -44,6 +45,7 @@ public class FootstepsManager {
         tileHashMap.put(SpiderNestTile.class, stony);
         tileHashMap.put(SwampRockTile.class, stony);
 
+        this.woody = new FootstepsWood();
         playerTiles.put(SimpleFloorTile.class, true);
         playerTiles.put(SimpleTiledFloorTile.class, true);
         playerTiles.put(EdgedTiledTexture.class, true);
@@ -86,10 +88,11 @@ public class FootstepsManager {
     }
 
     public void onPlayerTile(Mob mob, GameTile tile) {
-        String name = tile.getLocalization().toString();
+        // name is like 'tile.woodfloor' or 'tile.woodpathtile'
+        String name = tile.getStringID();
 
-        if (name.contains("Wood")) {
-            // TODO: special handling for wood tiles...
+        if (name.contains("wood")) {
+            this.woody.playSound(mob.x, mob.y);
             return;
         }
 
