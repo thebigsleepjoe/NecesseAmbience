@@ -69,11 +69,11 @@ public final class AmbientManager {
     }
 
     private void manageMobFootstepSounds(Mob mob) {
-        // Execute this code once per 0.3 seconds
-        if (AmbientManager.getTick() % AmbientManager.secondsToTicks(0.4f) != 0) {
+        if (AmbientManager.getTick() % AmbientManager.secondsToTicks(0.25f) != 0) {
             return;
         }
-        if (mob.isFlying() || mob.inLiquid()) return;
+
+        if (mob.isFlying()) return;
 
         float mobSpeedPct = getMobSpeedPct(mob);
         if (mobSpeedPct > 0.1f) {
