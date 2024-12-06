@@ -6,6 +6,7 @@ import ambiencemod.ambience.sounds.chirps.DuckChirp;
 import ambiencemod.ambience.sounds.chirps.SheepChirp;
 import ambiencemod.ambience.sounds.footsteps.FootstepsManager;
 import ambiencemod.ambience.sounds.global.BirdChirpAmbient;
+import ambiencemod.ambience.sounds.global.CaveAmbient;
 import ambiencemod.ambience.sounds.global.WindAmbient;
 import necesse.engine.GlobalData;
 import necesse.engine.network.client.Client;
@@ -40,8 +41,10 @@ public final class AmbientManager {
         sheepChirp = new SheepChirp();
         duckChirp = new DuckChirp();
 
+        // TODO: Create and use an annotation
        this.ambientTracks.add(new WindAmbient());
        this.ambientTracks.add(new BirdChirpAmbient());
+       this.ambientTracks.add(new CaveAmbient());
     }
 
     public float getMobSpeedPct(Mob mob) {
