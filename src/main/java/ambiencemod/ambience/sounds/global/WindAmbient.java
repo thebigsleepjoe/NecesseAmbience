@@ -9,7 +9,7 @@ public class WindAmbient extends GlobalAmbient {
     public WindAmbient() {
         super();
 
-        this.setVolume(0.7f);
+        this.setVolume(0.25f);
         this.setWaitUntilDone(true);
         this.setPitchRange(0.8f, 1.3f);
         this.setFadeInTime(2.0f);
