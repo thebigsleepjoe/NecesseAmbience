@@ -6,11 +6,13 @@ import ambiencemod.ambience.sounds.PositionalAmbient;
 import ambiencemod.ambience.sounds.SoundChance;
 import necesse.engine.network.client.Client;
 import necesse.engine.sound.gameSound.GameSound;
+import necesse.engine.util.GameRandom;
 import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
 
 // This class manages automatically playing "chirps" for animals nearby the player.
 public abstract class MobChirp extends PositionalAmbient {
+    public boolean lessNoisyAtNight = true;
 
     public MobChirp() {
         super();
@@ -43,10 +45,20 @@ public abstract class MobChirp extends PositionalAmbient {
         return (float)playerMob.getPositionPoint().distance(mob.getPositionPoint());
     }
 
+    protected boolean shouldQuietBecauseNight(Mob mob) {
+        return lessNoisyAtNight &&
+                mob.getWorldEntity() != null &&
+                mob.getWorldEntity().isNight() &&
+                GameRandom.globalRandom.getFloatBetween(0.0f, 1.0f) < 0.66f;
+    }
+
     public void onMobTick(Mob mob) {
         Client client = AmbientMod.ambientManager.getClient();
         if (client == null) return;
         if (distToClient(client, mob) > 512.0f) return;
+
+        // animals chirp much less at night
+        if (shouldQuietBecauseNight(mob)) return;
 
         if (shouldPlaySound(mob)) {
             playSound(mob.x, mob.y);
