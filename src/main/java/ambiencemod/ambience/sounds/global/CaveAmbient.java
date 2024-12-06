@@ -9,7 +9,7 @@ public class CaveAmbient extends GlobalAmbient {
     public CaveAmbient() {
         super();
 
-        this.setVolume(0.5f);
+        this.setVolume(1.0f);
         this.setWaitUntilDone(true);
         this.setPitchRange(0.9f, 1.4f);
         this.setFadeInTime(3.0f);

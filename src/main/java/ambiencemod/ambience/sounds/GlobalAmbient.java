@@ -81,22 +81,25 @@ public class GlobalAmbient extends PositionalAmbient {
         this.soundPlayer = null;
     }
 
-    public void handleMuffle(PlayerMob ply) {
-        if (!this.mufflesIndoors) return;
-        if (this.soundPlayer == null) return;
-        if (!this.isPlaying()) return;
+    public boolean handleMuffle(PlayerMob ply) {
+        if (!this.mufflesIndoors) return false;
+        if (this.soundPlayer == null) return false;
+        if (this.soundPlayer.effect == null) return false;
+        if (!this.isPlaying()) return false;
 
         Level lvl = ply.getLevel();
-        if (lvl == null) return;
+        if (lvl == null) return false;
 
         final boolean shouldMuffle = !lvl.isOutside(ply.getTileX(), ply.getTileY());
 
-        if (shouldMuffle == this.isMuffled) return; // No need to do anything. We are where we need to be.
-
-        final float gainAmount = 5.0f; // I think this is dB
+        if (shouldMuffle == this.isMuffled) return true;
 
         this.isMuffled = shouldMuffle;
-        this.soundPlayer.alSetGain(shouldMuffle ? -gainAmount : 0.0f);
+//        this.soundPlayer.alSetGain(this.volume * (shouldMuffle ? 0.35f : 1.0f));
+        float result = this.volume * (shouldMuffle ? 0.35f : 1.0f);
+        this.soundPlayer.effect.volume(result);
+
+        return true;
     }
 
     public boolean canRun(PlayerMob ply) {
@@ -119,7 +122,10 @@ public class GlobalAmbient extends PositionalAmbient {
             return;
         }
 
-        this.handleMuffle(ply);
+        final boolean muffled = this.handleMuffle(ply);
+        if (!muffled && this.soundPlayer.effect != null) {
+            this.soundPlayer.effect.volume(this.volume);
+        }
 
         final boolean finished = !this.isPlaying() || this.isDone();
 
