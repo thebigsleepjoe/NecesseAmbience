@@ -1,11 +1,8 @@
 package ambiencemod.ambience.sounds;
 
-import ambiencemod.ambience.sounds.chirps.BirdChirp;
-import ambiencemod.ambience.sounds.chirps.CowChirp;
-import ambiencemod.ambience.sounds.chirps.DuckChirp;
-import ambiencemod.ambience.sounds.chirps.SheepChirp;
+import ambiencemod.ambience.sounds.chirps.*;
 import ambiencemod.ambience.sounds.footsteps.FootstepsManager;
-import ambiencemod.ambience.sounds.global.BirdChirpAmbient;
+import ambiencemod.ambience.sounds.global.BirdAmbient;
 import ambiencemod.ambience.sounds.global.CaveAmbient;
 import ambiencemod.ambience.sounds.global.WindAmbient;
 import necesse.engine.GlobalData;
@@ -20,31 +17,34 @@ import necesse.entity.mobs.friendly.critters.BirdMob;
 import necesse.entity.mobs.friendly.critters.DuckMob;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class AmbientManager {
     public static long tick = 0;
-    ArrayList<GlobalAmbient> ambientTracks = new ArrayList<GlobalAmbient>();
+    public static final ArrayList<GlobalAmbient> ambientTracks = new ArrayList<>();
+    public static final HashMap<Class<? extends Mob>, MobChirp> chirpMap = new HashMap<>();
     FootstepsManager footstepsManager;
-
-    // Locational animal noises
-    BirdChirp birdChirp;
-    CowChirp cowChirp;
-    SheepChirp sheepChirp;
-    DuckChirp duckChirp;
 
     public AmbientManager() {
         this.footstepsManager = new FootstepsManager();
+        loadChirps();
+        loadAmbient();
+    }
 
-        // Locational animal chirps
-        birdChirp = new BirdChirp();
-        cowChirp = new CowChirp();
-        sheepChirp = new SheepChirp();
-        duckChirp = new DuckChirp();
+    private void loadChirps() {
+        // all chirp classes add themselves to chirpMap
+        new BirdChirp();
+        new CowChirp();
+        new SheepChirp();
+        new DuckChirp();
+    }
 
-        // TODO: Create and use an annotation
-       this.ambientTracks.add(new WindAmbient());
-       this.ambientTracks.add(new BirdChirpAmbient());
-       this.ambientTracks.add(new CaveAmbient());
+    private void loadAmbient() {
+        // all ambient classes add themselves to ambientTracks
+        new WindAmbient();
+        new CaveAmbient();
+        new BirdAmbient();
     }
 
     public float getMobSpeedPct(Mob mob) {
@@ -53,13 +53,13 @@ public final class AmbientManager {
     }
 
     public void stopGlobalTracks() {
-        for (GlobalAmbient track : this.ambientTracks) {
+        for (GlobalAmbient track : ambientTracks) {
             track.stopPlayer();
         }
     }
 
     private void manageAmbientTracks(PlayerMob ply) {
-        for (GlobalAmbient track : this.ambientTracks) {
+        for (GlobalAmbient track : ambientTracks) {
             if (track.canRun(ply)) {
                 track.update(ply);
             } else {
@@ -83,16 +83,11 @@ public final class AmbientManager {
     }
 
     private void manageMobChirps(Mob mob) {
-        // While this code may look unappealing and non-modular, it's a much simpler way to implement sounds.
-        if (mob instanceof BirdMob) {
-            birdChirp.onMobTick(mob);
-        }else if (mob instanceof CowMob) {
-            cowChirp.onMobTick(mob);
-        }else if (mob instanceof SheepMob) {
-            sheepChirp.onMobTick(mob);
-        }else if (mob instanceof DuckMob) {
-            duckChirp.onMobTick(mob);
-        }
+        MobChirp chirp = chirpMap.get(mob.getClass());
+
+        if (chirp == null) return;
+
+        chirp.playSound(mob.x, mob.y);
     }
 
     public static boolean isInGame() {

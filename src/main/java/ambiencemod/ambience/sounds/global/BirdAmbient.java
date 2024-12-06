@@ -10,9 +10,9 @@ import necesse.level.maps.biomes.pirate.PirateVillageBiome;
 import necesse.level.maps.biomes.plains.PlainsBiome;
 import necesse.level.maps.biomes.swamp.SwampBiome;
 
-public class BirdChirpAmbient extends GlobalAmbient {
+public class BirdAmbient extends GlobalAmbient {
 
-    public BirdChirpAmbient() {
+    public BirdAmbient() {
         super();
 
         this.biomes.add(ForestBiome.class);

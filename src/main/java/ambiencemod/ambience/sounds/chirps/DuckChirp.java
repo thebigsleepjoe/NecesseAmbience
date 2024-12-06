@@ -1,6 +1,8 @@
 package ambiencemod.ambience.sounds.chirps;
 
+import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.SoundChance;
+import necesse.entity.mobs.friendly.critters.DuckMob;
 
 public class DuckChirp extends MobChirp {
 
@@ -16,5 +18,10 @@ public class DuckChirp extends MobChirp {
         this.addSoundPath("birds/Duck3.ogg");
         this.addSoundPath("birds/Duck4.ogg");
         this.addSoundPath("birds/Duck5.ogg");
+    }
+
+    @Override
+    protected void registerChirps() {
+        AmbientManager.chirpMap.put(DuckMob.class, this);
     }
 }

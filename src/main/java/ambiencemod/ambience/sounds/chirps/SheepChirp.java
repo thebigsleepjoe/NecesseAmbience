@@ -1,6 +1,8 @@
 package ambiencemod.ambience.sounds.chirps;
 
+import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.SoundChance;
+import necesse.entity.mobs.friendly.SheepMob;
 
 public class SheepChirp extends MobChirp {
 
@@ -18,5 +20,10 @@ public class SheepChirp extends MobChirp {
         this.addSoundPath("sheep/Sheep6.ogg");
         this.addSoundPath("sheep/Sheep7.ogg");
         this.addSoundPath("sheep/Sheep8.ogg");
+    }
+
+    @Override
+    protected void registerChirps() {
+        AmbientManager.chirpMap.put(SheepMob.class, this);
     }
 }

@@ -23,7 +23,9 @@ public class GlobalAmbient extends PositionalAmbient {
     public boolean mufflesIndoors = true;
     private boolean isMuffled = false;
 
-    public GlobalAmbient() {}
+    public GlobalAmbient() {
+        AmbientManager.ambientTracks.add(this);
+    }
 
     public void setFadeInTime(float time) {
         this.fadeInTime = time;

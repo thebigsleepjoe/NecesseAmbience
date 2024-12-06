@@ -19,6 +19,8 @@ public abstract class MobChirp extends PositionalAmbient {
         this.setPitchRange(0.8f, 1.2f);
         this.setMinTicksBetweenPlays(AmbientManager.secondsToTicks(5.0f));
         this.setChance(SoundChance.ALMOST_NEVER);
+
+        this.registerChirps();
     }
 
     @Override
@@ -26,6 +28,8 @@ public abstract class MobChirp extends PositionalAmbient {
         // overridden because this otherwise gets scaled with the footsteps volume slider.
        return 1.0f;
     }
+
+    protected abstract void registerChirps();
 
     public boolean shouldPlaySound(Mob mob) {
         return true;

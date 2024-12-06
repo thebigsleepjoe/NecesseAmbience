@@ -1,8 +1,11 @@
 package ambiencemod.ambience.sounds.chirps;
 
+import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.SoundChance;
 import necesse.engine.util.GameRandom;
 import necesse.entity.mobs.Mob;
+import necesse.entity.mobs.friendly.SheepMob;
+import necesse.entity.mobs.friendly.critters.BirdMob;
 
 public class BirdChirp extends MobChirp {
     public BirdChirp() {
@@ -15,6 +18,11 @@ public class BirdChirp extends MobChirp {
         this.addSoundPath("birds/Cardinal3.ogg");
         this.addSoundPath("birds/Cardinal4.ogg");
         this.addSoundPath("birds/Generic1.ogg");
+    }
+
+    @Override
+    protected void registerChirps() {
+        AmbientManager.chirpMap.put(BirdMob.class, this);
     }
 
     public boolean isAirborne(Mob mob) {

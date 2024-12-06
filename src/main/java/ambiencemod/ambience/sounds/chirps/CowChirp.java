@@ -1,6 +1,8 @@
 package ambiencemod.ambience.sounds.chirps;
 
+import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.SoundChance;
+import necesse.entity.mobs.friendly.CowMob;
 
 public class CowChirp extends MobChirp {
 
@@ -15,5 +17,10 @@ public class CowChirp extends MobChirp {
         this.addSoundPath("cows/Cow3.ogg");
         this.addSoundPath("cows/Cow4.ogg");
         this.addSoundPath("cows/Cow5.ogg");
+    }
+
+    @Override
+    protected void registerChirps() {
+        AmbientManager.chirpMap.put(CowMob.class, this);
     }
 }
