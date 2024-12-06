@@ -1,6 +1,7 @@
 package ambiencemod.ambience.sounds.global;
 
 import ambiencemod.ambience.sounds.GlobalAmbient;
+import necesse.engine.world.WorldEntity;
 import necesse.entity.mobs.PlayerMob;
 import necesse.level.maps.Level;
 import necesse.level.maps.biomes.forest.ForestBiome;
@@ -34,11 +35,14 @@ public class BirdAmbient extends GlobalAmbient {
     public boolean canRun(PlayerMob ply) {
         Level lvl = ply.getLevel();
         if (lvl == null) return false;
+        if (ply.getWorldEntity() == null) return false;
 
         if (lvl.isCave) return false;
-        if (lvl.getWorldEntity().isNight()) return false;
-        // if (!lvl.isOutside(ply.getTileX(), ply.getTileY())) return false;
         if (!this.isInBiomes(ply)) return false;
+
+        WorldEntity.TimeOfDay time = ply.getWorldEntity().getTimeOfDay();
+        System.out.println(time);
+        if (time == WorldEntity.TimeOfDay.EVENING || time == WorldEntity.TimeOfDay.NIGHT) return false;
 
         return true;
     }
