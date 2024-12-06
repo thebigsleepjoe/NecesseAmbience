@@ -11,14 +11,9 @@ import necesse.engine.state.MainGame;
 import necesse.engine.state.State;
 import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
-import necesse.entity.mobs.friendly.CowMob;
-import necesse.entity.mobs.friendly.SheepMob;
-import necesse.entity.mobs.friendly.critters.BirdMob;
-import necesse.entity.mobs.friendly.critters.DuckMob;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public final class AmbientManager {
     public static long tick = 0;
@@ -47,38 +42,24 @@ public final class AmbientManager {
         new BirdAmbient();
     }
 
-    public float getMobSpeedPct(Mob mob) {
+    public static float getMobSpeedPct(Mob mob) {
         //return (mob.getCurrentSpeed() / mob.getSpeed());
-        return (mob.getCurrentSpeed() / 35.0f); // 35.0f is baseline human speed, makes footstep speed more consistent. basically 2x step sounds per second
+        return (mob.getCurrentSpeed() / 40.0f);
     }
 
-    public void stopGlobalTracks() {
+    public static void stopGlobalTracks() {
         for (GlobalAmbient track : ambientTracks) {
             track.stopPlayer();
         }
     }
 
-    private void manageAmbientTracks(PlayerMob ply) {
+    private static void updateAmbientTracks(PlayerMob ply) {
         for (GlobalAmbient track : ambientTracks) {
             if (track.canRun(ply)) {
                 track.update(ply);
             } else {
                 track.stopPlayer();
             }
-        }
-    }
-
-    private void manageMobFootstepSounds(Mob mob) {
-        if (AmbientManager.getTick() % AmbientManager.secondsToTicks(0.25f) != 0) {
-            return;
-        }
-
-        if (mob.isFlying()) return;
-
-        float mobSpeedPct = getMobSpeedPct(mob);
-        if (mobSpeedPct > 0.1f) {
-            this.footstepsManager.onFootstep(mob);
-            // System.out.println("Playing footstep for " + mob.getDisplayName());
         }
     }
 
@@ -113,14 +94,13 @@ public final class AmbientManager {
         return (float) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
-
     public void onMobTick(Mob mob) {
         if (!isInGame()) return;
         PlayerMob ply = AmbientManager.getLocalPlayer();
         if (ply == null) return;
 
         if (ply == mob) { // end early, no need to calculate distance to self
-            this.manageMobFootstepSounds(mob);
+            this.footstepsManager.onMobTick(mob);
             return;
         }
 
@@ -129,9 +109,13 @@ public final class AmbientManager {
         float distTo = distance(mob.x, mob.y, ply.x, ply.y);
 
         if (distTo < 800) { // Prevent overwhelming the sound engine
-            this.manageMobFootstepSounds(mob);
+            this.footstepsManager.onMobTick(mob);
             this.manageMobChirps(mob);
         }
+    }
+
+    public static float getTimeSecs() {
+        return System.nanoTime() / 1_000_000_000.0f;
     }
 
     public static float ticksToSeconds(int tick) {
@@ -142,13 +126,15 @@ public final class AmbientManager {
         return (int)(seconds * 20.0f);
     }
 
+    // FIXME: might be broken....???
     public static long getTick() {
         return AmbientManager.tick;
     }
 
     public void onGameSecondTick() {
         PlayerMob ply = AmbientManager.getLocalPlayer();
-        this.manageAmbientTracks(ply);
+        this.updateAmbientTracks(ply);
+        this.footstepsManager.onGameSecondTick();
     }
 }
 

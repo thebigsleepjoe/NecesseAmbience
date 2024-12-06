@@ -1,16 +1,18 @@
 package ambiencemod.ambience.sounds.footsteps;
 
+import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.FootstepsAmbient;
-import necesse.engine.localization.message.GameMessage;
 import necesse.entity.mobs.Mob;
-import necesse.entity.mobs.PlayerMob;
 import necesse.level.gameTile.*;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class FootstepsManager {
     public HashMap<Class<? extends GameTile>, FootstepsAmbient> tileHashMap = new HashMap<>();
     public HashMap<Class<? extends GameTile>, Boolean> playerTiles = new HashMap<>();
+    public HashMap<Mob, Float> footstepTime = new HashMap<>();
     public FootstepsGrass grassy;
     public FootstepsStone stony;
     public FootstepsWater watery;
@@ -74,6 +76,45 @@ public class FootstepsManager {
         tileHashMap.put(MudTile.class, muddy);
         tileHashMap.put(SlimeLiquidTile.class, muddy);
         tileHashMap.put(FarmlandTile.class, muddy);
+    }
+
+    private void validateFootstepTime() {
+        final float cleanupTime = 10.0f;
+        final float timeNow = AmbientManager.getTimeSecs();
+
+        Iterator<Map.Entry<Mob, Float>> iterator = this.footstepTime.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Mob, Float> entry = iterator.next();
+            Mob mob = entry.getKey();
+            float time = entry.getValue();
+            boolean oldEnough = timeNow - time > cleanupTime;
+            if (oldEnough || mob == null || mob.isDisposed()) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public void onGameSecondTick() {
+        this.validateFootstepTime();
+    }
+
+    public void onMobTick(Mob mob) {
+        if (mob == null) return;
+        if (mob.isFlying()) return;
+
+        final float mobSpeedPct = AmbientManager.getMobSpeedPct(mob);
+        if (mobSpeedPct < 0.1f) return;
+
+        float seconds = AmbientManager.getTimeSecs();
+        // ideal rate is 3 steps/sec for PlayerMob, but may be higher or lower depending on speed
+        float speedFactorSecs = 0.33f / mobSpeedPct;
+        float lastTimeSecs = this.footstepTime.getOrDefault(mob, 0.0f);
+        float timeSinceSecs = seconds - lastTimeSecs;
+
+        if (timeSinceSecs < speedFactorSecs) return;
+
+        this.footstepTime.put(mob, seconds);
+        this.onFootstep(mob);
     }
 
     public void onFootstep(Mob mob) {
