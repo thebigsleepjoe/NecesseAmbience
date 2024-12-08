@@ -4,6 +4,7 @@ import ambiencemod.ambience.sounds.chirps.*;
 import ambiencemod.ambience.sounds.footsteps.FootstepsManager;
 import ambiencemod.ambience.sounds.global.BirdAmbient;
 import ambiencemod.ambience.sounds.global.CaveAmbient;
+import ambiencemod.ambience.sounds.global.ForestNightAmbient;
 import ambiencemod.ambience.sounds.global.WindAmbient;
 import necesse.engine.GlobalData;
 import necesse.engine.network.client.Client;
@@ -40,6 +41,7 @@ public final class AmbientManager {
         new WindAmbient();
         new CaveAmbient();
         new BirdAmbient();
+        new ForestNightAmbient();
     }
 
     public static float getMobSpeedPct(Mob mob) {
