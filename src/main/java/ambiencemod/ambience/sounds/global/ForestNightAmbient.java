@@ -23,7 +23,7 @@ public class ForestNightAmbient extends GlobalAmbient {
         this.biomes.add(PlainsBiome.class);
         this.biomes.add(SwampBiome.class);
 
-        this.setVolume(0.4f);
+        this.setVolume(0.3f);
         this.setWaitUntilDone(true);
         this.setPitchRange(0.7f, 1.3f);
         this.setFadeInTime(1.0f);

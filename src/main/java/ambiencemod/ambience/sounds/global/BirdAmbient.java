@@ -23,7 +23,7 @@ public class BirdAmbient extends GlobalAmbient {
         this.biomes.add(PlainsBiome.class);
         this.biomes.add(SwampBiome.class);
 
-        this.setVolume(1.0f);
+        this.setVolume(0.7f);
         this.setWaitUntilDone(true);
         this.setPitchRange(0.7f, 1.3f);
         this.setFadeInTime(1.0f);
