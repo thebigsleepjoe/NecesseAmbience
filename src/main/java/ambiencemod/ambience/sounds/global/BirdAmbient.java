@@ -41,7 +41,6 @@ public class BirdAmbient extends GlobalAmbient {
         if (!this.isInBiomes(ply)) return false;
 
         WorldEntity.TimeOfDay time = ply.getWorldEntity().getTimeOfDay();
-        System.out.println(time);
         if (time == WorldEntity.TimeOfDay.EVENING || time == WorldEntity.TimeOfDay.NIGHT) return false;
 
         return true;
