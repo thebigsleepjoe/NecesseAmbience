@@ -6,7 +6,7 @@ public abstract class FootstepsAmbient extends PositionalAmbient {
     public FootstepsAmbient() {
         super();
         this.setChance(SoundChance.ALWAYS);
-        this.setVolume(1.0f);
+        this.setMaxVolume(1.0f);
         this.setPitchRange(0.8f, 1.2f);
         this.setMinTicksBetweenPlays(0); // This is managed elsewhere.
 

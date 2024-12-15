@@ -116,6 +116,12 @@ public final class AmbientManager {
         }
     }
 
+    public void onTick() {
+        for (GlobalAmbient track : ambientTracks) {
+            track.onTick(getLocalPlayer());
+        }
+    }
+
     public static float getTimeSecs() {
         return System.nanoTime() / 1_000_000_000.0f;
     }

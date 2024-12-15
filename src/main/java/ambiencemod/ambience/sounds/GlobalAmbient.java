@@ -21,17 +21,50 @@ public class GlobalAmbient extends PositionalAmbient {
     public boolean waitUntilDone = false;
     public float fadeInTime = 0.0f;
     public boolean mufflesIndoors = true;
-    private boolean isMuffled = false;
+    protected boolean isMuffled = false;
+    protected final float lerpRate = 1.0f / 20.0f;
+    protected float targetVolume = 0.0f;
+    protected float volume = 0.0f;
 
     public GlobalAmbient() {
         AmbientManager.ambientTracks.add(this);
     }
 
+    @Deprecated
     public void setFadeInTime(float time) {
         this.fadeInTime = time;
     }
+
     public void setWaitUntilDone(boolean wait) {
         this.waitUntilDone = wait;
+    }
+
+    public float getAdjustedMaxVolume() {
+        return this.maxVolume * this.getVolumeSetting();
+    }
+
+    public float getTargetVolume() {
+        return this.targetVolume;
+    }
+
+    public void setTargetVolume(float x) {
+        this.targetVolume = x;
+    }
+
+    public void resetVolume() {
+        this.volume = 0.0f;
+    }
+
+    private void tickVolume() {
+        if (!this.isPlaying()) {
+            this.resetVolume();
+            return;
+        }
+
+        this.setTargetVolume(this.getAdjustedMaxVolume() * (this.isMuffled ? 0.5f : 1.0f));
+
+        this.volume = lerp(this.volume, this.getTargetVolume(), this.lerpRate);
+        this.soundPlayer.effect.volume(this.volume);
     }
 
     private float getCurrentTimeSecs() {
@@ -47,13 +80,31 @@ public class GlobalAmbient extends PositionalAmbient {
             return;
         }
 
+        this.resetVolume();
         this.soundPlayer = SoundManager.playSound(this.getRandomSound(), GlobalSoundEffect.globalEffect()
-                        .volume(this.getVolume())
-                        .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)))
-                        .fadeIn(this.fadeInTime);
+                        .volume(0.0f) // this is managed externally
+                        .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)));
     }
 
-    public float getVolumeModPct() {
+    private static float lerp(float a, float b, float t) {
+        return a + t * (b - a);
+    }
+
+    public void onTick(PlayerMob ply) {
+        if (ply == null) return;
+
+        this.isMuffled = this.getShouldMuffle(ply);
+        this.tickVolume();
+
+        if (this.soundPlayer == null || this.soundPlayer.effect == null) return;
+        this.soundPlayer.effect.volume(this.getVolume());
+    }
+
+    public float getVolume() {
+        return this.volume;
+    }
+
+    public float getVolumeSetting() {
         return SettingsFormPatch.ambienceVolumePct;
     }
 
@@ -79,9 +130,10 @@ public class GlobalAmbient extends PositionalAmbient {
         // we dispose here instead of just restartPlayer because it will allow a new sound to play
         this.soundPlayer.dispose();
         this.soundPlayer = null;
+        this.resetVolume();
     }
 
-    public boolean handleMuffle(PlayerMob ply) {
+    public boolean getShouldMuffle(PlayerMob ply) {
         if (!this.mufflesIndoors) return false;
         if (this.soundPlayer == null) return false;
         if (this.soundPlayer.effect == null) return false;
@@ -90,16 +142,7 @@ public class GlobalAmbient extends PositionalAmbient {
         Level lvl = ply.getLevel();
         if (lvl == null) return false;
 
-        final boolean shouldMuffle = !lvl.isOutside(ply.getTileX(), ply.getTileY());
-
-        if (shouldMuffle == this.isMuffled) return true;
-
-        this.isMuffled = shouldMuffle;
-//        this.soundPlayer.alSetGain(this.volume * (shouldMuffle ? 0.35f : 1.0f));
-        float result = this.volume * (shouldMuffle ? 0.35f : 1.0f);
-        this.soundPlayer.effect.volume(result);
-
-        return true;
+        return !lvl.isOutside(ply.getTileX(), ply.getTileY());
     }
 
     public boolean canRun(PlayerMob ply) {
@@ -113,6 +156,7 @@ public class GlobalAmbient extends PositionalAmbient {
         this.soundPlayer.dispose();
         this.soundPlayer = null;
         this.isMuffled = false;
+        this.resetVolume();
     }
 
     public void update(PlayerMob ply) {
@@ -120,11 +164,6 @@ public class GlobalAmbient extends PositionalAmbient {
         if (this.soundPlayer == null) {
             this.playSound();
             return;
-        }
-
-        final boolean muffled = this.handleMuffle(ply);
-        if (!muffled && this.soundPlayer.effect != null) {
-            this.soundPlayer.effect.volume(this.volume);
         }
 
         final boolean finished = !this.isPlaying() || this.isDone();

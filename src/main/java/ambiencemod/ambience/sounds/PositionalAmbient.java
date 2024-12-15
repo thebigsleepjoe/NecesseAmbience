@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public abstract class PositionalAmbient {
     ArrayList<GameSound> sounds;
-    float volume = 1.0f;
+    float maxVolume = 1.0f;
     float pitchRangeLow = 1.0f;
     float pitchRangeHigh = 1.1f;
     SoundChance chance = SoundChance.ALWAYS;
@@ -22,8 +22,8 @@ public abstract class PositionalAmbient {
         this.sounds = new ArrayList<>();
     }
 
-    public void setVolume(float v) {
-        this.volume = v;
+    public void setMaxVolume(float v) {
+        this.maxVolume = v;
     }
 
     public void setPitchRange(float low, float high) {
@@ -47,12 +47,12 @@ public abstract class PositionalAmbient {
         this.addSound(GameSound.fromFile(soundPath));
     }
 
-    public float getVolumeModPct() {
+    public float getVolumeSetting() {
         return SettingsFormPatch.footstepsVolumePct;
     }
 
     public float getVolume() {
-        return this.volume * this.getVolumeModPct();
+        return this.maxVolume * this.getVolumeSetting();
     }
 
     public GameSound getRandomSound() throws RuntimeException {

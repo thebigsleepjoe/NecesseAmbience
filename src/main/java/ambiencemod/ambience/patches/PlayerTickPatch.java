@@ -11,6 +11,7 @@ public class PlayerTickPatch {
     @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
     static boolean onEnter(@Advice.This PlayerMob mob) {
         AmbientMod.ambientManager.onMobTick(mob);
+        AmbientMod.ambientManager.onTick();
         return false; // return false to not disrupt other code execution
     }
 

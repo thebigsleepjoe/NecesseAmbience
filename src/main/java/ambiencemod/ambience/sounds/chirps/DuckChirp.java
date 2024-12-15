@@ -8,7 +8,7 @@ public class DuckChirp extends MobChirp {
 
     public DuckChirp() {
         super();
-        this.setVolume(0.4f);
+        this.setMaxVolume(0.4f);
 
         this.setChance(SoundChance.FREQUENT);
         this.setPitchRange(0.5f, 1.5f);

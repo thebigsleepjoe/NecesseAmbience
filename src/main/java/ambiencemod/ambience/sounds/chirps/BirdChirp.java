@@ -4,13 +4,12 @@ import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.SoundChance;
 import necesse.engine.util.GameRandom;
 import necesse.entity.mobs.Mob;
-import necesse.entity.mobs.friendly.SheepMob;
 import necesse.entity.mobs.friendly.critters.BirdMob;
 
 public class BirdChirp extends MobChirp {
     public BirdChirp() {
         super();
-        this.setVolume(0.5f);
+        this.setMaxVolume(0.5f);
         this.setChance(SoundChance.OFTEN);
 
         this.addSoundPath("birds/Cardinal1.ogg");

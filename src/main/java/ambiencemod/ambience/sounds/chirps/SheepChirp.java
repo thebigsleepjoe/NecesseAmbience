@@ -8,7 +8,7 @@ public class SheepChirp extends MobChirp {
 
     public SheepChirp() {
         super();
-        this.setVolume(0.3f);
+        this.setMaxVolume(0.3f);
 
         this.setChance(SoundChance.RARELY);
 
