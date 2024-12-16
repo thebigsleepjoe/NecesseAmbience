@@ -6,7 +6,7 @@ import ambiencemod.ambience.sounds.SoundChance;
 public class FootstepsWater extends FootstepsAmbient {
     public FootstepsWater() {
         this.setPitchRange(0.8f, 1.2f);
-        this.setMinTicksBetweenPlays(30);
+        this.setMinTicksBetweenPlays(25);
         this.addSoundPath("footsteps/Swim1.ogg");
         this.addSoundPath("footsteps/Swim2.ogg");
         this.addSoundPath("footsteps/Swim3.ogg");
