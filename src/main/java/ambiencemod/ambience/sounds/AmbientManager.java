@@ -134,9 +134,11 @@ public final class AmbientManager {
         return (int)(seconds * 20.0f);
     }
 
-    // FIXME: might be broken....???
     public static long getTick() {
-        return AmbientManager.tick;
+        // So this isn't the IDEAL implementation, but to keep everything working reasonably well,
+        // this just takes the current system time in secs and divides it by 20.
+        // ... nothing is more permanent than a temporary solution.
+        return System.nanoTime() / 50_000_000;
     }
 
     public void onGameSecondTick() {
