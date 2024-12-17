@@ -10,7 +10,6 @@ public class DuckChirp extends MobChirp {
         super();
         this.setMaxVolume(0.4f);
 
-        this.setChance(SoundChance.FREQUENT);
         this.setPitchRange(0.5f, 1.5f);
 
         this.addSoundPath("birds/Duck1.ogg");

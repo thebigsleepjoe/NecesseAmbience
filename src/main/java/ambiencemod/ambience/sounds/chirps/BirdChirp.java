@@ -10,7 +10,6 @@ public class BirdChirp extends MobChirp {
     public BirdChirp() {
         super();
         this.setMaxVolume(0.5f);
-        this.setChance(SoundChance.OFTEN);
 
         this.addSoundPath("birds/Cardinal1.ogg");
         this.addSoundPath("birds/Cardinal2.ogg");

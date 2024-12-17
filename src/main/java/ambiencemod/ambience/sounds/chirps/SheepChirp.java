@@ -10,8 +10,6 @@ public class SheepChirp extends MobChirp {
         super();
         this.setMaxVolume(0.3f);
 
-        this.setChance(SoundChance.RARELY);
-
         this.addSoundPath("sheep/Sheep1.ogg");
         this.addSoundPath("sheep/Sheep2.ogg");
         this.addSoundPath("sheep/Sheep3.ogg");

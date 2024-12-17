@@ -19,15 +19,9 @@ public abstract class MobChirp extends PositionalAmbient {
         this.setMaxVolume(0.4f);
         this.setPitchRange(0.8f, 1.2f);
         this.setMinTicksBetweenPlays(AmbientManager.secondsToTicks(5.0f));
-        this.setChance(SoundChance.ALMOST_NEVER);
+        this.setChance(SoundChance.ALWAYS);
 
         this.registerChirps();
-    }
-
-    @Override
-    public float getVolumeSetting() {
-        // overridden because this otherwise gets scaled with the footsteps volume slider.
-       return 1.0f;
     }
 
     protected abstract void registerChirps();
@@ -54,6 +48,8 @@ public abstract class MobChirp extends PositionalAmbient {
     public void onMobTick(Mob mob) {
         Client client = AmbientMod.ambientManager.getClient();
         if (client == null) return;
+        if (!this.shouldPlaySound(mob)) return;
+        if (this.getVolumeSetting() <= 0.01f) return;
         if (distToClient(client, mob) > 512.0f) return;
 
         // animals chirp much less at night

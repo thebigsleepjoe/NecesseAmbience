@@ -10,8 +10,6 @@ public class CowChirp extends MobChirp {
         super();
         this.setMaxVolume(0.3f);
 
-        this.setChance(SoundChance.RARELY);
-
         this.addSoundPath("cows/Cow1.ogg");
         this.addSoundPath("cows/Cow2.ogg");
         this.addSoundPath("cows/Cow3.ogg");
