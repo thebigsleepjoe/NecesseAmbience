@@ -9,6 +9,7 @@ import ambiencemod.ambience.sounds.global.WindAmbient;
 import necesse.engine.GlobalData;
 import necesse.engine.network.client.Client;
 import necesse.engine.state.MainGame;
+import necesse.engine.state.MainMenu;
 import necesse.engine.state.State;
 import necesse.entity.mobs.Mob;
 import necesse.entity.mobs.PlayerMob;
@@ -26,6 +27,12 @@ public final class AmbientManager {
         this.footstepsManager = new FootstepsManager();
         loadChirps();
         loadAmbient();
+    }
+
+    public static boolean isPaused() {
+        Client client = getClient();
+        if (client == null) return true;
+        return client.isPaused();
     }
 
     private void loadChirps() {
@@ -98,6 +105,8 @@ public final class AmbientManager {
 
     public void onMobTick(Mob mob) {
         if (!isInGame()) return;
+        if (isPaused()) return; // no footsteps when paused
+
         PlayerMob ply = AmbientManager.getLocalPlayer();
         if (ply == null) return;
 
@@ -117,7 +126,12 @@ public final class AmbientManager {
     }
 
     public void onTick() {
+        boolean paused = isPaused();
         for (GlobalAmbient track : ambientTracks) {
+            if (paused) {
+                track.setTargetVolume(0.0f);
+                continue;
+            }
             track.onTick(getLocalPlayer());
         }
     }
