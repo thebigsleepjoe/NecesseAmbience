@@ -126,12 +126,7 @@ public final class AmbientManager {
     }
 
     public void onTick() {
-        boolean paused = isPaused();
         for (GlobalAmbient track : ambientTracks) {
-            if (paused) {
-                track.setTargetVolume(0.0f);
-                continue;
-            }
             track.onTick(getLocalPlayer());
         }
     }
