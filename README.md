@@ -1,4 +1,5 @@
 # Necesse Ambience 🔊
+![preview.png](./src/main/resources/preview.png)
 
 ## Description
 This mod adds wind, background ambience, animal noises, footstep sounds, and more to the game Necesse.
@@ -7,7 +8,8 @@ All sounds were acquired from the [Freesound Project](https://freesound.org/) an
 
 ## Download
 
-Please see the Workshop page on Steam for the latest build. (TODO: PUBLISH)
+Please see the Workshop page on Steam for the latest build.
+https://steamcommunity.com/sharedfiles/filedetails/?id=3389136731
 
 ## Contributing
 
