@@ -61,8 +61,12 @@ public class GlobalAmbient extends PositionalAmbient {
             return;
         }
 
+        assert this.soundPlayer != null;
+        float timeLeft = this.soundPlayer.getSecondsLeft();
+        float timeLeftModifier = timeLeft < 4.0f ? timeLeft / 4.0f : 1.0f; // little extra time buffer just in case
+
         float pausedModifier = AmbientManager.isPaused() ? 0.0f : 1.0f;
-        this.setTargetVolume(pausedModifier * this.getAdjustedMaxVolume() * (this.isMuffled ? 0.3f : 1.0f));
+        this.setTargetVolume(pausedModifier * timeLeftModifier * this.getAdjustedMaxVolume() * (this.isMuffled ? 0.3f : 1.0f));
 
         this.volume = lerp(this.volume, this.getTargetVolume(), this.lerpRate);
         this.soundPlayer.effect.volume(this.volume);
