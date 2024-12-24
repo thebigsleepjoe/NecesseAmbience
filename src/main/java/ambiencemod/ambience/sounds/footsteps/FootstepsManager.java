@@ -124,9 +124,9 @@ public class FootstepsManager {
         FootstepsAmbient match = this.tileHashMap.get(tclass);
         Boolean isPlayerTile = this.playerTiles.getOrDefault(tclass, false);
 
-        if (mob.isPlayer) {
-            System.out.println("Player tile name: " + tile.getDisplayName() + " | " + tile.getClass().getName());
-        }
+//        if (mob.isPlayer) {
+//            System.out.println("Player tile name: " + tile.getDisplayName() + " | " + tile.getClass().getName());
+//        }
 
         if (match == null) {
             if (isPlayerTile != true) return;
