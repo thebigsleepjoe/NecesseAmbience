@@ -12,8 +12,6 @@ public class CaveAmbient extends GlobalAmbient {
         this.setMaxVolume(1.0f);
         this.setWaitUntilDone(true);
         this.setPitchRange(0.9f, 1.4f);
-        this.setFadeInTime(3.0f);
-        this.setTimeBetweenRepeats(30.0f);
 
         this.addSoundPath("global/Cave-01.ogg");
         this.addSoundPath("global/Cave-02.ogg");
