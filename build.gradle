@@ -134,8 +134,8 @@ task runServer(type: JavaExec) {
 
     classpath = files(gameDirectory + "/Server.jar")
 
-    main = "StartServer"
-    jvmArgs "-Xms512m", "-Xmx3G", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=32M"
+    main = "StartDesktopServer"
+    jvmArgs "-Xms512m", "-Xmx4G", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=32M"
     args "-mod \"${buildLocation}\""
 }
 
