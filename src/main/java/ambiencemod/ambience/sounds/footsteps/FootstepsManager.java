@@ -4,6 +4,7 @@ import ambiencemod.ambience.sounds.AmbientManager;
 import ambiencemod.ambience.sounds.FootstepsAmbient;
 import necesse.entity.mobs.Mob;
 import necesse.level.gameTile.*;
+import necesse.level.maps.Level;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -118,7 +119,10 @@ public class FootstepsManager {
     }
 
     public void onFootstep(Mob mob) {
-        GameTile tile = mob.getLevel().getTile(mob.getTileX(), mob.getTileY());
+        Level level = mob.getLevel();
+        if (level == null) return;
+
+        GameTile tile = level.getTile(mob.getTileX(), mob.getTileY());
         Class<? extends GameTile> tclass = tile.getClass();
 
         FootstepsAmbient match = this.tileHashMap.get(tclass);
