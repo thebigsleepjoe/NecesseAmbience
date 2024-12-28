@@ -13,6 +13,7 @@ public class GameSecondPatch {
     public static long lastExecMS = 0;
     @Advice.OnMethodEnter()
     static boolean onEnter() {
+        if (AmbientMod.shouldDisable()) return false;
         AmbientManager.tick++;
         long curTime = System.currentTimeMillis();
         if (curTime - lastExecMS > 1000) {
