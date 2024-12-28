@@ -7,7 +7,7 @@ plugins {
 
 project.ext.modID = "tbsj.ambience" // The unique id of your mod. Must be all lowercase and cannot use special characters.
 project.ext.modName = "TBSJAmbientSound" // The display name of your mod.
-project.ext.modVersion = "1.11" // Your current builds version. Must follow the xx.xx... format.
+project.ext.modVersion = "1.12" // Your current builds version. Must follow the xx.xx... format.
 project.ext.gameVersion = "0.29.0" // The target game version.
 project.ext.modDescription = "Adds ambient sounds to Necesse. Includes footsteps, animal noises, and biome/time-specific ambience." // Short description of what your mod is.
 project.ext.author = "thebigsleepjoe" // Your name
