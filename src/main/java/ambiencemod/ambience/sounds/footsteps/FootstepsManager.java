@@ -6,6 +6,7 @@ import necesse.entity.mobs.Mob;
 import necesse.level.gameTile.*;
 import necesse.level.maps.Level;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class FootstepsManager {
         tileHashMap.put(FarmlandTile.class, muddy);
     }
 
-    private void validateFootstepTime() {
+    private void validateFootstepTime() throws ConcurrentModificationException {
         final float cleanupTime = 10.0f;
         final float timeNow = AmbientManager.getTimeSecs();
 
@@ -96,7 +97,11 @@ public class FootstepsManager {
     }
 
     public void onGameSecondTick() {
-        this.validateFootstepTime();
+        try {
+            this.validateFootstepTime();
+        } catch (ConcurrentModificationException e) {
+            System.err.println("[Ambience] CME thrown...");
+        }
     }
 
     public void onMobTick(Mob mob) {
