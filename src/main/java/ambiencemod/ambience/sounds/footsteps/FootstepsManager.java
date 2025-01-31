@@ -32,6 +32,7 @@ public class FootstepsManager {
         tileHashMap.put(SimpleTerrainTile.class, grassy);
         tileHashMap.put(SwampGrassTile.class, grassy);
         tileHashMap.put(PlainsGrassTile.class, grassy);
+        tileHashMap.put(OvergrownGrassTile.class, grassy);
 
         // STONY
         this.stony = new FootstepsStone();
@@ -149,9 +150,9 @@ public class FootstepsManager {
         FootstepsAmbient match = this.tileHashMap.get(tclass);
         Boolean isPlayerTile = this.playerTiles.getOrDefault(tclass, false);
 
-//        if (mob.isPlayer) {
-//            System.out.println("Player tile name: " + tile.getDisplayName() + " | " + tile.getClass().getName());
-//        }
+        if (mob.isPlayer) {
+            System.out.println("Player tile name: " + tile.getDisplayName() + " | " + tile.getClass().getName());
+        }
 
         if (match == null) {
             if (isPlayerTile != true) return;
