@@ -161,7 +161,8 @@ public class FootstepsManager {
 
         final float bodySize = this.getMobBodySize(mob);
         final float mobSpeedPct = AmbientManager.getMobSpeedPct(mob);
-        final float volumeMod = Math.max(0.1f, Math.min(1.25f, bodySize * mobSpeedPct));
+        final float summonFactor = mob.isSummoned ? 0.5f : 1.0f;
+        final float volumeMod = Math.max(0.1f, Math.min(1.25f, bodySize * mobSpeedPct * summonFactor));
 
         match.playSound(
                 mob.x,
