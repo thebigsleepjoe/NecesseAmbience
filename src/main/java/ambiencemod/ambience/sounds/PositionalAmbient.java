@@ -65,7 +65,7 @@ public abstract class PositionalAmbient {
         return this.sounds.get(GameRandom.globalRandom.getIntBetween(0, this.sounds.size() - 1));
     }
 
-    public void playSound(float x, float y) {
+    public void playSound(float x, float y, float volumeMod) {
         // Test if we succeed the min ticks between plays
         if (this.minTicksBetweenPlays != 0) {
             if (AmbientManager.getTick() - this.lastPlayTick < this.minTicksBetweenPlays) {
@@ -81,12 +81,16 @@ public abstract class PositionalAmbient {
         }
         // Play the sound
         SoundManager.playSound(this.getRandomSound(), SoundEffect.effect(x, y)
-                .volume(this.getVolume())
+                .volume(volumeMod * this.getVolume())
                 .pitch(GameRandom.globalRandom.getFloatBetween(this.pitchRangeLow, this.pitchRangeHigh)));
     }
 
+    public void playSound(float x, float y) {
+        this.playSound(x, y, 1.0f);
+    }
+
     // Play a sound at a random position around the client.
-    public void playSound() {
+    public void playSound(float volumeMod) {
         Client client = AmbientManager.getClient();
         PlayerMob player = client.getPlayer();
         if (player == null || player.isDisposed())
@@ -97,6 +101,10 @@ public abstract class PositionalAmbient {
         final float ANGLE = GameRandom.globalRandom.getFloatBetween(0.0f, 360.0f);
         final float x = player.x + (float) Math.cos(ANGLE) * RADIUS;
         final float y = player.y + (float) Math.sin(ANGLE) * RADIUS;
-        this.playSound(x, y);
+        this.playSound(x, y, volumeMod);
+    }
+
+    public void playSound() {
+        this.playSound(1.0f);
     }
 }

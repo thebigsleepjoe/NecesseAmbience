@@ -145,9 +145,12 @@ public class FootstepsManager {
             return;
         }
 
+        float volumeMod = 1.0f;
+
         match.playSound(
                 mob.x,
-                mob.y
+                mob.y,
+                volumeMod
         );
     }
 

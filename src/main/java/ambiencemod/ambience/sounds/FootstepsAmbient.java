@@ -37,9 +37,4 @@ public abstract class FootstepsAmbient extends PositionalAmbient {
             return SoundChance.ALWAYS.getChance();
         }
     }
-
-    public void playSound(float x, float y, float mobSpeedPct) {
-        if (GameRandom.globalRandom.getChance(this.getChanceFromSpeedPct(mobSpeedPct)))
-            super.playSound(x, y);
-    }
 }
