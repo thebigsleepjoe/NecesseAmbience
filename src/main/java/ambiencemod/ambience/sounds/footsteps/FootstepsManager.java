@@ -81,6 +81,8 @@ public class FootstepsManager {
     }
 
     private void validateFootstepTime() throws ConcurrentModificationException {
+        // FIXME: This throws a CME. I should probably fix it in the long run,
+        // FIXME: but I kinda don't care enough to ATM. -tbsj
         final float cleanupTime = 10.0f;
         final float timeNow = AmbientManager.getTimeSecs();
 
