@@ -6,6 +6,7 @@ import necesse.entity.mobs.Mob;
 import necesse.level.gameTile.*;
 import necesse.level.maps.Level;
 
+import java.awt.*;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -125,6 +126,19 @@ public class FootstepsManager {
         this.onFootstep(mob);
     }
 
+    public float getMobBodySize(Mob mob) {
+        // Mouse: ~24.0
+        // Human: ~25.922962
+        // Cow: ~27.712812
+        Rectangle collider = mob.getHitBox();
+
+        final double lowerRange = 23.5;
+        final double upperRange = 25.922962;
+        final double colliderSize = Math.sqrt((double)(collider.width * collider.height));
+
+        return (float)((colliderSize - lowerRange) / (upperRange - lowerRange));
+    }
+
     public void onFootstep(Mob mob) {
         Level level = mob.getLevel();
         if (level == null) return;
@@ -145,7 +159,9 @@ public class FootstepsManager {
             return;
         }
 
-        float volumeMod = 1.0f;
+        final float bodySize = this.getMobBodySize(mob);
+        final float mobSpeedPct = AmbientManager.getMobSpeedPct(mob);
+        final float volumeMod = Math.max(0.1f, Math.min(1.25f, bodySize * mobSpeedPct));
 
         match.playSound(
                 mob.x,
