@@ -6,9 +6,9 @@ import necesse.entity.mobs.PlayerMob;
 import necesse.level.maps.Level;
 import necesse.level.maps.biomes.forest.ForestBiome;
 import necesse.level.maps.biomes.forest.ForestVillageBiome;
-import necesse.level.maps.biomes.forest.PlainsVillageBiome;
 import necesse.level.maps.biomes.pirate.PirateVillageBiome;
 import necesse.level.maps.biomes.plains.PlainsBiome;
+import necesse.level.maps.biomes.plains.PlainsVillageBiome;
 import necesse.level.maps.biomes.swamp.SwampBiome;
 
 public class BirdAmbient extends GlobalAmbient {
