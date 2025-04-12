@@ -5,12 +5,10 @@ import ambiencemod.ambience.sounds.FootstepsAmbient;
 import necesse.entity.mobs.Mob;
 import necesse.level.gameTile.*;
 import necesse.level.maps.Level;
+import net.bytebuddy.utility.nullability.MaybeNull;
 
 import java.awt.*;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class FootstepsManager {
     public HashMap<Class<? extends GameTile>, FootstepsAmbient> tileHashMap = new HashMap<>();
@@ -23,6 +21,7 @@ public class FootstepsManager {
     public FootstepsWood woody;
     public FootstepsMud muddy;
     public FootstepsSnow snowy;
+    public HashMap<FootstepsAmbient, ArrayList<String>> strMatch;
 
     public FootstepsManager() {
         // GRASSY
@@ -80,6 +79,45 @@ public class FootstepsManager {
         tileHashMap.put(MudTile.class, muddy);
         tileHashMap.put(SlimeLiquidTile.class, muddy);
         tileHashMap.put(FarmlandTile.class, muddy);
+
+        this.strMatch = new HashMap<>();
+
+        ArrayList<String> grassStrs = new ArrayList<>();
+        grassStrs.add("grass");
+        grassStrs.add("foliage");
+        grassStrs.add("bush");
+        grassStrs.add("shrub");
+
+        ArrayList<String> sandyStrs = new ArrayList<>();
+        sandyStrs.add("sand");
+        sandyStrs.add("clay");
+
+        ArrayList<String> snowyStrs = new ArrayList<>();
+        snowyStrs.add("snow");
+        snowyStrs.add("powder");
+
+        ArrayList<String> muddyStrs = new ArrayList<>();
+        muddyStrs.add("mud");
+        muddyStrs.add("marsh");
+
+        ArrayList<String> woodyStrs = new ArrayList<>();
+        woodyStrs.add("plank");
+        woodyStrs.add("wood");
+        woodyStrs.add("board");
+
+        ArrayList<String> stonyStrs = new ArrayList<>();
+        stonyStrs.add("stone");
+        stonyStrs.add("rock");
+        stonyStrs.add("granite");
+        stonyStrs.add("tile");
+
+
+        this.strMatch.put(this.grassy, grassStrs);
+        this.strMatch.put(this.sandy, sandyStrs);
+        this.strMatch.put(this.snowy, snowyStrs);
+        this.strMatch.put(this.muddy, muddyStrs);
+        this.strMatch.put(this.woody, woodyStrs);
+        this.strMatch.put(this.stony, stonyStrs);
     }
 
     private void validateFootstepTime() throws ConcurrentModificationException {
@@ -140,6 +178,18 @@ public class FootstepsManager {
         return (float)((colliderSize - lowerRange) / (upperRange - lowerRange));
     }
 
+    @MaybeNull
+    public FootstepsAmbient matchClassName(String target) {
+        for (FootstepsAmbient k : this.strMatch.keySet()) {
+            ArrayList<String> v = this.strMatch.get(k);
+            for (String match : v) {
+                if (target.contains(match)) return k;
+            }
+        }
+
+        return null;
+    }
+
     public void onFootstep(Mob mob) {
         Level level = mob.getLevel();
         if (level == null) return;
@@ -147,11 +197,14 @@ public class FootstepsManager {
         GameTile tile = level.getTile(mob.getTileX(), mob.getTileY());
         Class<? extends GameTile> tclass = tile.getClass();
 
-        FootstepsAmbient match = this.tileHashMap.get(tclass);
         Boolean isPlayerTile = this.playerTiles.getOrDefault(tclass, false);
 
+        String cname = tile.getClass().getName().toLowerCase();
+        final FootstepsAmbient match = (this.tileHashMap.get(tclass) == null) ?
+                this.matchClassName(cname) : this.tileHashMap.get(tclass);
+
 //        if (mob.isPlayer) {
-//            System.out.println("Player tile name: " + tile.getDisplayName() + " | " + tile.getClass().getName());
+//            System.out.println("Player tile name: " + tile.getDisplayName() + " | " + cname);
 //        }
 
         if (match == null) {

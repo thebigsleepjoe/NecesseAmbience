@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.15.0
+
+### Added
+
+- Tiles now attempt a name-match before giving up. This means that tiles that aren't pre-defined by their classname can still make noise (assuming their class name matches a set list of strings)
+
+### Fixed
+
+- New plains biome underground not having audio
+
 ## 1.14
 
 Addressing some concerns about loud/repetitive footsteps for summons and smaller creatures.
