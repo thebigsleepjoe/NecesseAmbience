@@ -1,6 +1,7 @@
 package ambiencemod.ambience.patches;
 
 import ambiencemod.AmbientMod;
+import ambiencemod.ambience.sounds.AmbientManager;
 import necesse.engine.GlobalData;
 import necesse.engine.modLoader.annotations.ModMethodPatch;
 import necesse.engine.save.LoadData;
@@ -26,13 +27,13 @@ public class SettingsFormPatch {
     @MaybeNull
     public static SettingsForm currentSettingsForm;
 
-    public static float ambienceVolumePct = 0.5f;
-    public static float footstepsVolumePct = 0.5f;
+    public static float ambienceVolumePct = 0.2f;
+    public static float footstepsVolumePct = 0.3f;
 
     public static FormEventListener<FormInputEvent<FormSlider>> onCustomSliderChanged = e -> {
         float pct = e.from.getPercentage();
         if (ambienceSlider.equals(e.from)) {
-            AmbientMod.ambientManager.stopGlobalTracks();
+            AmbientManager.stopGlobalTracks();
             ambienceVolumePct = pct;
         } else {
             footstepsVolumePct = pct;
