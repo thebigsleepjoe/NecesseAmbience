@@ -180,7 +180,7 @@ public class GlobalAmbient extends PositionalAmbient {
 
     public boolean isInBiomes(PlayerMob ply) {
         Level lvl = ply.getLevel();
-        Biome biome = lvl.biome;
+        Biome biome = lvl.getBiome(ply.getTileX(), ply.getTileY());
 
         for (Class<? extends Biome> aClass : biomes) {
             if (biome.getClass().equals(aClass)) return true;
