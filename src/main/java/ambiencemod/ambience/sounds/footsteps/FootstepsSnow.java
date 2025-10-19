@@ -14,5 +14,8 @@ public class FootstepsSnow extends FootstepsAmbient {
         this.addSoundPath("footsteps/Snow-08.ogg");
         this.addSoundPath("footsteps/Snow-09.ogg");
         this.addSoundPath("footsteps/Snow-10.ogg");
+
+        this.setMaxVolume(0.7f);
+        this.setPitchRange(0.9f, 1.1f);
     }
 }
