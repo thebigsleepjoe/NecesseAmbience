@@ -119,7 +119,7 @@ public final class AmbientManager {
 
         float distTo = distance(mob.x, mob.y, ply.x, ply.y);
 
-        if (distTo < 800) { // Prevent overwhelming the sound engine
+        if (distTo < 450.0f) { // Prevent overwhelming the sound engine
             this.footstepsManager.onMobTick(mob);
             this.manageMobChirps(mob);
         }

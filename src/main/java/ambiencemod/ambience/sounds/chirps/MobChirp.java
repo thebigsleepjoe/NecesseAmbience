@@ -50,7 +50,7 @@ public abstract class MobChirp extends PositionalAmbient {
         if (client == null) return;
         if (!this.shouldPlaySound(mob)) return;
         if (this.getVolumeSetting() <= 0.01f) return;
-        if (distToClient(client, mob) > 512.0f) return;
+        if (distToClient(client, mob) > 450.0f) return;
 
         // animals chirp much less at night
         if (shouldQuietBecauseNight(mob)) return;
