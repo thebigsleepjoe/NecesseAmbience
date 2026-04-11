@@ -62,7 +62,7 @@ public class GlobalAmbient extends PositionalAmbient {
         }
 
         assert this.soundPlayer != null;
-        float timeLeft = this.soundPlayer.getSecondsLeft();
+        float timeLeft = (float)this.soundPlayer.getSecondsLeft();
         float timeLeftModifier = timeLeft < 4.0f ? timeLeft / 4.0f : 1.0f; // little extra time buffer just in case
 
         float pausedModifier = AmbientManager.isPaused() ? 0.0f : 1.0f;
